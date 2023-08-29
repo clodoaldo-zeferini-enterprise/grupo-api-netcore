@@ -1,0 +1,461 @@
+{
+	"info": {
+		"_postman_id": "15be2574-0b36-46c7-a32b-dbbd44fa144a",
+		"name": "API Grupo - appsettings.dev.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3548314"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "v1",
+					"item": [
+						{
+							"name": "Grupo",
+							"item": [
+								{
+									"name": "Get",
+									"item": [
+										{
+											"name": "/api/v1/Grupo/Get",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/Grupo/Get?PageNumber=<integer>&PageSize=<integer>&Id=<uuid>&FiltraNome=<boolean>&FiltroNome=<string>&FiltraDataInsert=<boolean>&DataInicial=<dateTime>&DataFinal=<dateTime>&FiltraStatus=<boolean>&Status=1&SysUsuSessionId=<uuid>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"Grupo",
+														"Get"
+													],
+													"query": [
+														{
+															"key": "PageNumber",
+															"value": "<integer>"
+														},
+														{
+															"key": "PageSize",
+															"value": "<integer>"
+														},
+														{
+															"key": "Id",
+															"value": "<uuid>"
+														},
+														{
+															"key": "FiltraNome",
+															"value": "<boolean>"
+														},
+														{
+															"key": "FiltroNome",
+															"value": "<string>"
+														},
+														{
+															"key": "FiltraDataInsert",
+															"value": "<boolean>"
+														},
+														{
+															"key": "DataInicial",
+															"value": "<dateTime>"
+														},
+														{
+															"key": "DataFinal",
+															"value": "<dateTime>"
+														},
+														{
+															"key": "FiltraStatus",
+															"value": "<boolean>"
+														},
+														{
+															"key": "Status",
+															"value": "1"
+														},
+														{
+															"key": "SysUsuSessionId",
+															"value": "<uuid>"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/Grupo/Get?PageNumber=<integer>&PageSize=<integer>&Id=<uuid>&FiltraNome=<boolean>&FiltroNome=<string>&FiltraDataInsert=<boolean>&DataInicial=<dateTime>&DataFinal=<dateTime>&FiltraStatus=<boolean>&Status=1&SysUsuSessionId=<uuid>",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"Grupo",
+																"Get"
+															],
+															"query": [
+																{
+																	"key": "PageNumber",
+																	"value": "<integer>"
+																},
+																{
+																	"key": "PageSize",
+																	"value": "<integer>"
+																},
+																{
+																	"key": "Id",
+																	"value": "<uuid>"
+																},
+																{
+																	"key": "FiltraNome",
+																	"value": "<boolean>"
+																},
+																{
+																	"key": "FiltroNome",
+																	"value": "<string>"
+																},
+																{
+																	"key": "FiltraDataInsert",
+																	"value": "<boolean>"
+																},
+																{
+																	"key": "DataInicial",
+																	"value": "<dateTime>"
+																},
+																{
+																	"key": "DataFinal",
+																	"value": "<dateTime>"
+																},
+																{
+																	"key": "FiltraStatus",
+																	"value": "<boolean>"
+																},
+																{
+																	"key": "Status",
+																	"value": "1"
+																},
+																{
+																	"key": "SysUsuSessionId",
+																	"value": "<uuid>"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Post",
+									"item": [
+										{
+											"name": "/api/v1/Grupo/Post",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"sysUsuSessionId\": \"12A52AB8-308D-4340-8F80-7770D404AE51\",\n  \"getGrupoRequest\": {\n    \"sysUsuSessionId\": \"12A52AB8-308D-4340-8F80-7770D404AE51\",\n    \"pageNumber\": 1,\n    \"pageSize\": 10,\n    \"id\": null,\n    \"filtraNome\": false,\n    \"filtroNome\": null,\n    \"filtraDataInsert\": false,\n    \"dataInicial\": null,\n    \"dataFinal\": null,\n    \"filtraStatus\": false,\n    \"status\": 0\n  },\n  \"nome\": \"Teste 01\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/Grupo/Post",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"Grupo",
+														"Post"
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"sysUsuSessionId\": \"<uuid>\",\n  \"getGrupoRequest\": {\n    \"sysUsuSessionId\": \"<uuid>\",\n    \"pageNumber\": \"<integer>\",\n    \"pageSize\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"filtraNome\": \"<boolean>\",\n    \"filtroNome\": \"<string>\",\n    \"filtraDataInsert\": \"<boolean>\",\n    \"dataInicial\": \"<dateTime>\",\n    \"dataFinal\": \"<dateTime>\",\n    \"filtraStatus\": \"<boolean>\",\n    \"status\": 0\n  },\n  \"nome\": \"<string>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/Grupo/Post",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"Grupo",
+																"Post"
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Put",
+									"item": [
+										{
+											"name": "/api/v1/Grupo/Put",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"sysUsuSessionId\": \"<uuid>\",\n  \"id\": \"<uuid>\",\n  \"status\": 1,\n  \"nome\": \"<string>\",\n  \"getGrupoRequest\": {\n    \"sysUsuSessionId\": \"<uuid>\",\n    \"pageNumber\": \"<integer>\",\n    \"pageSize\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"filtraNome\": \"<boolean>\",\n    \"filtroNome\": \"<string>\",\n    \"filtraDataInsert\": \"<boolean>\",\n    \"dataInicial\": \"<dateTime>\",\n    \"dataFinal\": \"<dateTime>\",\n    \"filtraStatus\": \"<boolean>\",\n    \"status\": 0\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/Grupo/Put?id=<long>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"Grupo",
+														"Put"
+													],
+													"query": [
+														{
+															"key": "id",
+															"value": "<long>"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"sysUsuSessionId\": \"<uuid>\",\n  \"id\": \"<uuid>\",\n  \"status\": 1,\n  \"nome\": \"<string>\",\n  \"getGrupoRequest\": {\n    \"sysUsuSessionId\": \"<uuid>\",\n    \"pageNumber\": \"<integer>\",\n    \"pageSize\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"filtraNome\": \"<boolean>\",\n    \"filtroNome\": \"<string>\",\n    \"filtraDataInsert\": \"<boolean>\",\n    \"dataInicial\": \"<dateTime>\",\n    \"dataFinal\": \"<dateTime>\",\n    \"filtraStatus\": \"<boolean>\",\n    \"status\": 0\n  }\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/Grupo/Put?id=<long>",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"Grupo",
+																"Put"
+															],
+															"query": [
+																{
+																	"key": "id",
+																	"value": "<long>"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Delete",
+									"item": [
+										{
+											"name": "/api/v1/Grupo/Delete",
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"sysUsuSessionId\": \"12A52AB8-308D-4340-8F80-7770D404AE51\",\n  \"id\": \"9347650a-525d-43f1-ad9b-fb0a574bde93\",\n  \"getGrupoRequest\": {\n    \"sysUsuSessionId\": \"12A52AB8-308D-4340-8F80-7770D404AE51\",\n    \"pageNumber\": 1,\n    \"pageSize\": 10,\n    \"id\": null,\n    \"filtraNome\": false,\n    \"filtroNome\": null,\n    \"filtraDataInsert\": false,\n    \"dataInicial\": null,\n    \"dataFinal\": null,\n    \"filtraStatus\": false,\n    \"status\": 0\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/Grupo/Delete?id=9347650a-525d-43f1-ad9b-fb0a574bde93",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"Grupo",
+														"Delete"
+													],
+													"query": [
+														{
+															"key": "id",
+															"value": "9347650a-525d-43f1-ad9b-fb0a574bde93"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"sysUsuSessionId\": \"<uuid>\",\n  \"id\": \"<uuid>\",\n  \"getGrupoRequest\": {\n    \"sysUsuSessionId\": \"<uuid>\",\n    \"pageNumber\": \"<integer>\",\n    \"pageSize\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"filtraNome\": \"<boolean>\",\n    \"filtroNome\": \"<string>\",\n    \"filtraDataInsert\": \"<boolean>\",\n    \"dataInicial\": \"<dateTime>\",\n    \"dataFinal\": \"<dateTime>\",\n    \"filtraStatus\": \"<boolean>\",\n    \"status\": 1\n  }\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/Grupo/Delete?id=<long>",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"Grupo",
+																"Delete"
+															],
+															"query": [
+																{
+																	"key": "id",
+																	"value": "<long>"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://localhost:5001"
+		}
+	]
+}
