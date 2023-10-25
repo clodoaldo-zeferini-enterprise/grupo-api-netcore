@@ -41,6 +41,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_GRUPO_API_NET_CORE }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"clodoaldo-zeferini-enterprise_Grupo-api-netcore" /o:"clodoaldo-zeferini-enterprise" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"clodoaldo-zeferini-enterprise_Grupo-api-netcore" /o:"clodoaldo-zeferini-enterprise" /d:sonar.login="${{ secrets.SONAR_TOKEN_GRUPO_API_NET_CORE }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build src\Service.Grupo.API\  --configuration Release
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN_GRUPO_API_NET_CORE }}"
