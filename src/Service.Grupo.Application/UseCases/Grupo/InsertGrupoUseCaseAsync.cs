@@ -41,10 +41,10 @@ namespace Service.Grupo.Application.UseCases.Grupo
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
         private GrupoOutResponse _output;
-        private GrupoResponse         GrupoResponse;
+        private GrupoResponse         grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse    authorizationResponse;
-        private Domain.Entities.Grupo GrupoToInsert;
+        private Domain.Entities.Grupo grupoToInsert;
 
         public InsertGrupoUseCaseAsync(
               IConfiguration configuration
@@ -82,13 +82,13 @@ namespace Service.Grupo.Application.UseCases.Grupo
                     return _output;
                 }
 
-                GrupoToInsert = new Domain.Entities.Grupo(Guid.NewGuid());
-                GrupoToInsert.SysUsuSessionId = request.SysUsuSessionId;
-                GrupoToInsert.Status = Domain.Enum.EStatus.ATIVO;
-                GrupoToInsert.DataInsert = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                GrupoToInsert.Nome = request.Nome;
+                grupoToInsert = new Domain.Entities.Grupo(Guid.NewGuid());
+                grupoToInsert.SysUsuSessionId = request.SysUsuSessionId;
+                grupoToInsert.Status = Domain.Enum.EStatus.ATIVO;
+                grupoToInsert.DataInsert = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                grupoToInsert.Nome = request.Nome;
 
-                if (await _grupoRepository.Insert(GrupoToInsert))
+                if (await _grupoRepository.Insert(grupoToInsert))
                 {
                     _output.Mensagem  = "Registro inserido com Sucesso!";
                     _output.Data = await _getGrupoUseCaseAsync.ExecuteAsync(request.GetGrupoRequest);
