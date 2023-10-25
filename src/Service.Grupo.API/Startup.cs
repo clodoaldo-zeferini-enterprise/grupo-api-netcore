@@ -6,7 +6,7 @@ namespace Service.Grupo.API
     public class Startup
     {
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-        private Configuration _myConfiguration;
+        private readonly Configuration _myConfiguration;
 
         public Startup(IConfiguration configuration)
         {
@@ -34,7 +34,7 @@ namespace Service.Grupo.API
                                   builder =>
                                   {
                                       builder.WithOrigins(
-                                            "https://localhost:5001"
+                                            "https://192.168.15.10:5001"
                                           , "https://Server-DES"
                                           , "https://Server-HOM"
                                           , "https://Server-PRO"
@@ -83,17 +83,6 @@ namespace Service.Grupo.API
                 c.SwaggerDoc(_myConfiguration.Swagger.SwaggerDoc.Name, new Microsoft.OpenApi.Models.OpenApiInfo { Title = _myConfiguration.Swagger.SwaggerDoc.OpenApiInfo.Title, Version = _myConfiguration.Swagger.SwaggerDoc.OpenApiInfo.Version });
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
-
-
-            /*
-             
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc(_myConfiguration.Swagger.SwaggerDoc.Name, new Microsoft.OpenApi.Models.OpenApiInfo {Title = _myConfiguration.Swagger.SwaggerDoc.OpenApiInfo.Title, Version = _myConfiguration.Swagger.SwaggerDoc.OpenApiInfo.Version });
-                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-            });
-             
-             */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

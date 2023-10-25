@@ -7,9 +7,9 @@ using Service.Grupo.Application.Models.Request.Log;
 using Service.Grupo.Application.Models.Request.STS;
 using Service.Grupo.Application.Models.Response;
 using Service.Grupo.Application.UseCases.Grupo;
+using Service.Grupo.Application.UseCases.Log;
 using Service.Grupo.Infrastructure.Repositories.DB;
 using Service.Grupo.Repository.Interfaces.Repositories.DB;
-using Service.Grupo.Application.UseCases.Log;
 
 
 namespace Service.Grupo.Infrastructure.IoC
@@ -41,7 +41,5 @@ namespace Service.Grupo.Infrastructure.IoC
             #endregion[Registrar Injeção de Dependência - Repositorio - DBGrupo]
 
         }
-
-
     }
 }
