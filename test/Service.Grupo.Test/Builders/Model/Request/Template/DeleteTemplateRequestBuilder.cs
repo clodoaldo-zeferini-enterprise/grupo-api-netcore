@@ -43,7 +43,7 @@ namespace Service.Grupo.Test.Builders.Model.Request.Grupo
 
         public Application.Models.Request.Grupo.DeleteGrupoRequest Build()
         {
-            var Grupo = new Application.Models.Request.Grupo.DeleteGrupoRequest(Id, SysUsuSessionId, new Application.Models.Request.Grupo.GetGrupoRequest(1,20));
+            var Grupo = new Application.Models.Request.Grupo.DeleteGrupoRequest(Id, SysUsuSessionId);
             return Grupo;
         }
     }

@@ -4,8 +4,7 @@ using System;
 namespace Service.Grupo.Application.Base
 {
     public class Base
-    {
-        public Guid Id { get; set; }
+    {        
         public EStatus Status { get; set; }
         public DateTime? DataInsert { get; set; }
         public DateTime? DataUpdate { get; set; }

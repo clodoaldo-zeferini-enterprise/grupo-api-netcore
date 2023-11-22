@@ -8,7 +8,7 @@ namespace Service.Grupo.Application.Models.Request.Grupo
     {
         public UInt16 PageNumber { get; set; }
         public UInt16 PageSize { get; set; }
-        public Guid? Id { get; set; }
+        public Guid? GrupoId { get; set; }
         public bool FiltraNome { get; set; }
         public string FiltroNome { get; set; }
         public bool FiltraDataInsert { get; set; }
@@ -20,11 +20,11 @@ namespace Service.Grupo.Application.Models.Request.Grupo
 
         private void Validate()
         {
-            var IsIdValido = Guid.TryParse(Id.ToString(), out Guid idValido);
+            var IsGrupoIdValido = Guid.TryParse(GrupoId.ToString(), out Guid idValido);
             var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid sysUsuSessionIdValido);
 
             ValidadorDeRegra.Novo()
-                .Quando(!IsIdValido, Resource.IdInvalido)
+                .Quando(!IsGrupoIdValido, Resource.IdInvalido)
                 .Quando(!IsSysUsuSessionIdValido, Resource.SysUsuSessionIdInvalido)
                 .Quando((FiltraNome && (FiltroNome == null || FiltroNome.Length == 0 || FiltroNome.Length > 100)), Resource.FiltroNomeInvalido)
                 .Quando(((!FiltraNome && (FiltroNome != null && FiltroNome.Length != 0))), Resource.FiltroNomeInvalido)
@@ -47,9 +47,9 @@ namespace Service.Grupo.Application.Models.Request.Grupo
         {
         }
 
-        public GetGrupoRequest(Guid id)
+        public GetGrupoRequest(Guid grupoId)
         {
-            Id = id;
+            GrupoId = grupoId;
         }
 
         public GetGrupoRequest(UInt16 pageNumber, UInt16 pageSize)

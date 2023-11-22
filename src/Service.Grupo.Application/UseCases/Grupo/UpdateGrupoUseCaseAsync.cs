@@ -85,9 +85,9 @@ namespace Service.Grupo.Application.UseCases.Grupo
                     return _output;
                 }
 
-                grupoToUpdate = await _grupoRepository.GetById(request.Id);
+                grupoToUpdate = await _grupoRepository.GetById(request.GrupoId);
 
-                grupoToUpdate.Nome = request.Nome;
+                grupoToUpdate.NomeDoGrupo = request.Nome;
                 grupoToUpdate.Status = request.Status;
                 grupoToUpdate.SysUsuSessionId = request.SysUsuSessionId;
 
@@ -96,7 +96,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
                 if (await _grupoRepository.Update(grupoToUpdate))
                 {
                     _output.AddMensagem("Registro Alterado com Sucesso!");
-                    _output.Data = await _getGrupoUseCaseAsync.ExecuteAsync(request.GetGrupoRequest);
+                    _output.Data = grupoToUpdate;
                     _output.Resultado = true;
                 }
             }

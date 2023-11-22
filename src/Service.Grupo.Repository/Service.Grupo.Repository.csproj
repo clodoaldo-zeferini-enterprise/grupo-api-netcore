@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup><AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Service$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.15" />
+    <PackageReference Include="Dapper" Version="2.1.21" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

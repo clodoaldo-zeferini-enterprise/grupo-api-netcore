@@ -42,7 +42,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
         private IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> _getGrupoUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private GrupoOutResponse _output;
+        private GrupoOutResponse output;
         private GrupoResponse grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse authorizationResponse;
@@ -63,7 +63,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
             _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
-            _output = new()
+            output = new()
             {
                 Resultado = false,
                 Mensagem = "Dados Fornecidos são inválidos!"
@@ -78,21 +78,21 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
                 if (!authorizationOutResponse.Resultado)
                 {
-                    _output.Resultado = false;
-                    _output.Mensagem = "Ocorreu uma falha na Autorização!";
-                    _output.Data = null;
+                    output.Resultado = false;
+                    output.Mensagem = "Ocorreu uma falha na Autorização!";
+                    output.Data = null;
 
-                    return _output;
+                    return output;
                 }
 
-                grupoToDelete = await _grupoRepository.GetById(request.Id);
+                grupoToDelete = await _grupoRepository.GetById(request.RequestId);
                 grupoToDelete.DataUpdate = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 grupoToDelete.SysUsuSessionId = request.SysUsuSessionId;
                 grupoToDelete.Status = Domain.Enum.EStatus.EXCLUIDO;
 
-                _output.Resultado = await _grupoRepository.Update(grupoToDelete);
+                output.Resultado = await _grupoRepository.Update(grupoToDelete);
 
-                _output.Mensagem = (_output.Resultado ? "Registro Excluído com Sucesso!" : "Ocorreu uma falha ao Excluir o Registro!");
+                output.Mensagem = (output.Resultado ? "Registro Excluído com Sucesso!" : "Ocorreu uma falha ao Excluir o Registro!");
             }
             catch (Exception ex)
             {
@@ -101,18 +101,18 @@ namespace Service.Grupo.Application.UseCases.Grupo
                 {
                     errorResponse
                 };
-                _output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
+                output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
 
-                _output.AddExceptions(ex);
-                _output.Mensagem = "Ocorreu uma falha ao Excluir o Registro!";
+                output.AddExceptions(ex);
+                output.Mensagem = "Ocorreu uma falha ao Excluir o Registro!";
             }
             finally
             {
-                _output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
+                output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
                 _sendLogUseCaseAsync.ExecuteAsync(new LogRequest(request.SysUsuSessionId));
             }
 
-            return _output;
+            return output;
         }
     }
 }

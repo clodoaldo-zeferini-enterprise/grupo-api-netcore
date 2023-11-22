@@ -30,7 +30,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
             _configuration = null;
             
             _grupoRepository = null;
-            _output = null;
+            output = null;
             _configuration = null;
             
         }
@@ -45,7 +45,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
         private IGrupoRepository _grupoRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
-        private GrupoOutResponse _output;
+        private GrupoOutResponse output;
 
         private GrupoResponse grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
@@ -64,7 +64,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
             _getGetAuthorizationUseCaseAsync = getGetAuthorizationUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
-            _output = new()
+            output = new()
             {
                 Resultado = false,
                 Mensagem = "Dados Fornecidos são inválidos!"
@@ -79,21 +79,21 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
                 if (!authorizationOutResponse.Resultado)
                 {
-                    _output.Resultado = false;
-                    _output.Mensagem = "Ocorreu uma falha na Autorização!";
-                    _output.Data = null;
+                    output.Resultado = false;
+                    output.Mensagem = "Ocorreu uma falha na Autorização!";
+                    output.Data = null;
 
-                    return _output;
+                    return output;
                 }
 
 
-                if (request.Id != null)
+                if (request.GrupoId != null)
                 {
-                    Service.Grupo.Domain.Entities.Grupo grupo = await _grupoRepository.GetById(request.Id.Value);
+                    Service.Grupo.Domain.Entities.Grupo grupo = await _grupoRepository.GetById(request.GrupoId.Value);
 
-                    _output.Resultado = true;
-                    _output.Mensagem = "Dado recuperado com Sucesso!";
-                    _output.Data = grupo;
+                    output.Resultado = true;
+                    output.Mensagem = "Dado recuperado com Sucesso!";
+                    output.Data = grupo;
                 }
                 else
                 {
@@ -101,8 +101,8 @@ namespace Service.Grupo.Application.UseCases.Grupo
                     string _query = String.Empty;
                     string _where = String.Empty;
 
-                    string tabela = $@"Grupo";
-                    string select = $@" SELECT [Id],[Nome],[Status],[DataInsert],[DataUpdate],[SysUsuSessionId] FROM [Exemplo].[dbo].[{tabela}] ";
+                    string tabela = $@"Sysmega.Grupo";
+                    string select = $@" SELECT [GrupoId] ,[Status],[NomeDoGrupo],[DataInsert],[DataUpdate],[SysUsuSessionId] FROM {tabela} ";
 
                     if (request.PageNumber <= 0) { request.PageNumber = 1; }
                     if (request.PageSize   <= 0) { request.PageSize   = 1; }
@@ -188,7 +188,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
                         EXEC sp_executesql @SelectNavigator;
 
                         SET @SelectTabelaDesejada = CONCAT( ' {select} '
-                                                           , @WHERE, '  ORDER BY ID ', ' OFFSET ', @PageSize * (@PageNumber - 1)
+                                                           , @WHERE, '  ORDER BY DataInsert ', ' OFFSET ', @PageSize * (@PageNumber - 1)
                                                            , ' ROWS FETCH NEXT ', @PageSize, ' ROWS ONLY ; ', ''
                                                          );
 
@@ -204,7 +204,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
                               );
 
                     var navigators = navigatorNovosCasosLog.Item1;
-                    var Grupos = navigatorNovosCasosLog.Item2;
+                    var grupos = navigatorNovosCasosLog.Item2;
 
                     GrupoResponse GrupoResponse = new();
 
@@ -216,9 +216,9 @@ namespace Service.Grupo.Application.UseCases.Grupo
                     }
 
                     List<Service.Grupo.Application.Models.Grupo> responseGrupos = new List<Service.Grupo.Application.Models.Grupo>();
-                    foreach (Domain.Entities.Grupo Grupo in Grupos)
+                    foreach (Domain.Entities.Grupo grupo in grupos)
                     {
-                        responseGrupos.Add(new Service.Grupo.Application.Models.Grupo(Grupo.Id, Grupo.Nome, Grupo.Status, Grupo.SysUsuSessionId, Grupo.DataInsert, Grupo.DataUpdate ));
+                        responseGrupos.Add(new Service.Grupo.Application.Models.Grupo(grupo.GrupoId, grupo.NomeDoGrupo, grupo.Status, grupo.SysUsuSessionId, grupo.DataInsert, grupo.DataUpdate ));
                     }
 
                     if (responseNavigators.Any() && responseGrupos.Any())
@@ -226,35 +226,35 @@ namespace Service.Grupo.Application.UseCases.Grupo
                         GrupoResponse.Navigators = responseNavigators;
                         GrupoResponse.Grupos = responseGrupos;
 
-                        _output.Resultado = true;
-                        _output.Mensagem = "Dados retornados com sucesso!";
-                        _output.Data = GrupoResponse;
+                        output.Resultado = true;
+                        output.Mensagem = "Dados retornados com sucesso!";
+                        output.Data = GrupoResponse;
                     }
                     else
                     {
-                        _output.Resultado = true;
-                        _output.Mensagem = "Nenhum dado encontrado!";
+                        output.Resultado = true;
+                        output.Mensagem = "Nenhum dado encontrado!";
                     }
 
-                    return _output;
+                    return output;
                 }
             }            
             catch (Exception ex)
             {
-                _output.Mensagem = "Ocorreram Exceções durante a execução";
-                _output.AddExceptions(ex);
+                output.Mensagem = "Ocorreram Exceções durante a execução";
+                output.AddExceptions(ex);
                 Models.Response.Errors.ErrorResponse errorResponse = new Models.Response.Errors.ErrorResponse("id", "parameter", JsonConvert.SerializeObject(ex, Formatting.Indented));
                 System.Collections.Generic.List<Models.Response.Errors.ErrorResponse> errorResponses = new System.Collections.Generic.List<Models.Response.Errors.ErrorResponse>();
                 errorResponses.Add(errorResponse);
-                _output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
+                output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
             }
             finally
             {
-                _output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
+                output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
                 _sendLogUseCaseAsync.ExecuteAsync(new LogRequest(request.SysUsuSessionId));
             }
 
-            return _output;
+            return output;
         }
     }
 }
