@@ -17,8 +17,10 @@ namespace Service.Grupo.API.Controllers
         private readonly IUseCaseAsync<UpdateGrupoRequest, GrupoOutResponse> _updateGrupoUseCaseAsync;
         private readonly IConfiguration _configuration;
 
+        private readonly ILogger<GrupoController> _logger;
         public GrupoController(
             IConfiguration configuration,
+            ILogger<GrupoController> logger,
             IUseCaseAsync<DeleteGrupoRequest, GrupoOutResponse> deleteGrupoUseCaseAsync,
             IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> getGrupoUseCaseAsync,
             IUseCaseAsync<InsertGrupoRequest, GrupoOutResponse> insertGrupoUseCaseAsync,
@@ -26,6 +28,7 @@ namespace Service.Grupo.API.Controllers
             )
         {
             _configuration = configuration;
+            _logger = logger;   
             _deleteGrupoUseCaseAsync = deleteGrupoUseCaseAsync;
             _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
             _insertGrupoUseCaseAsync = insertGrupoUseCaseAsync;
@@ -37,6 +40,7 @@ namespace Service.Grupo.API.Controllers
         {
             try
             {
+                _logger.LogInformation("HTTP GET: Called get method of WeatherForecast contorller");
                 using GrupoOutResponse grupoOutResponse = await _getGrupoUseCaseAsync.ExecuteAsync(request);
                 return Ok(grupoOutResponse);
             }
@@ -46,7 +50,7 @@ namespace Service.Grupo.API.Controllers
                 return StatusCode(500, ControllerContext.ModelState);
             }
         }
-
+         
         [HttpPost("Post")]
         public async Task<IActionResult> Post([FromBody] InsertGrupoRequest request)
         {
