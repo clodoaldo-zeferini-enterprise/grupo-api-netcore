@@ -4,32 +4,29 @@ namespace Service.Grupo.Application.Models.Request.Grupo
 {
     public class DeleteGrupoRequest : RequestBase
     {
-        public Guid Id { get; set; }
-        public GetGrupoRequest GetGrupoRequest { get; set; }
+        public Guid GrupoId { get; set; }
 
-        private DeleteGrupoRequest()
-        {
-        }
+        private DeleteGrupoRequest() {}
 
         private void Validate()
         {
-            var IsIdValido = Guid.TryParse(Id.ToString(), out Guid idValido);
+            var IsGrupoIdValido = Guid.TryParse(GrupoId.ToString(), out Guid idValido);
             var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid sysUsuSessionIdValido);
 
             Base.ValidadorDeRegra.Novo()
-                .Quando(!IsIdValido, Base.Resource.IdInvalido)
+                .Quando(!IsGrupoIdValido, Base.Resource.IdInvalido)
                 .Quando(!IsSysUsuSessionIdValido, Base.Resource.SysUsuSessionIdInvalido)
                 .DispararExcecaoSeExistir();
         }
 
 
-        public DeleteGrupoRequest(Guid id, Guid sysUsuSessionId, GetGrupoRequest getGrupoRequest)
+        public DeleteGrupoRequest(Guid grupoId, Guid sysUsuSessionId, bool retornaLista = false)
         {
-            Id = id;
+            GrupoId = grupoId;
             SysUsuSessionId = sysUsuSessionId;
+            RetornaLista = retornaLista;
 
             Validate();
-            GetGrupoRequest = getGrupoRequest;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Service.Grupo.API
             _myConfiguration = new Configuration();
             _configuration.Bind("Configuration", _myConfiguration);
 
+
         }
 
         public IConfiguration _configuration { get; }

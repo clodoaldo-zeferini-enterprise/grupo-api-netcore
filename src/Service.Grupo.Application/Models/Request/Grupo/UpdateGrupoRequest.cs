@@ -8,29 +8,25 @@ namespace Service.Grupo.Application.Models.Request.Grupo.Grupo
     {
         private void Validate()
         {
-            var IsIdValido = Guid.TryParse(Id.ToString(), out Guid idValido);
+            var IsGrupoIdValido = Guid.TryParse(GrupoId.ToString(), out Guid idValido);
             var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid sysUsuSessionIdValido);
 
             ValidadorDeRegra.Novo()
                 .Quando(!IsSysUsuSessionIdValido, Resource.SysUsuSessionIdInvalido)
-                .Quando(!IsIdValido, Resource.IdInvalido)
+                .Quando(!IsGrupoIdValido, Resource.IdInvalido)
                 .Quando((Nome == null || Nome.Length < 5 || Nome.Length > 100), Resource.NomeInvalido)
                 .DispararExcecaoSeExistir();
         }
 
-        public Guid Id { get; set; }
+        public Guid GrupoId { get; set; }
         public EStatus Status { get; set; }
         public string Nome { get; set; }
 
-        public GetGrupoRequest GetGrupoRequest { get; set; }    
-
-        public UpdateGrupoRequest(Guid id, EStatus status, string nome, GetGrupoRequest getGrupoRequest)
+        public UpdateGrupoRequest(Guid grupoId, EStatus status, string nomeDoGrupo)
         {
-            Id = id;
+            GrupoId = grupoId;
             Status = status;
-            Nome = nome;
-
-            GetGrupoRequest = getGrupoRequest;
+            Nome = nomeDoGrupo;
 
             Validate();            
         }

@@ -40,7 +40,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
         private IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> _getGrupoUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private GrupoOutResponse _output;
+        private GrupoOutResponse output;
         private GrupoResponse         grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse    authorizationResponse;
@@ -60,7 +60,7 @@ namespace Service.Grupo.Application.UseCases.Grupo
             _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
-            _output = new()
+            output = new()
             {
                 Resultado = false,
                 Mensagem = "Dados Fornecidos são inválidos!"
@@ -75,24 +75,24 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
                 if (!authorizationOutResponse.Resultado)
                 {
-                    _output.Resultado = false;
-                    _output.Mensagem = "Ocorreu uma falha na Autorização!";
-                    _output.Data = null;
+                    output.Resultado = false;
+                    output.Mensagem = "Ocorreu uma falha na Autorização!";
+                    output.Data = null;
 
-                    return _output;
+                    return output;
                 }
 
                 grupoToInsert = new Domain.Entities.Grupo(Guid.NewGuid());
                 grupoToInsert.SysUsuSessionId = request.SysUsuSessionId;
                 grupoToInsert.Status = Domain.Enum.EStatus.ATIVO;
                 grupoToInsert.DataInsert = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                grupoToInsert.Nome = request.Nome;
+                grupoToInsert.NomeDoGrupo = request.NomeDoGrupo;
 
                 if (await _grupoRepository.Insert(grupoToInsert))
                 {
-                    _output.Mensagem  = "Registro inserido com Sucesso!";
-                    _output.Data = await _getGrupoUseCaseAsync.ExecuteAsync(request.GetGrupoRequest);
-                    _output.Resultado = true;
+                    output.Mensagem  = "Registro inserido com Sucesso!";
+                    output.Data = grupoToInsert;
+                    output.Resultado = true;
                 }
             }
             catch (Exception ex)
@@ -102,18 +102,18 @@ namespace Service.Grupo.Application.UseCases.Grupo
                 {
                     errorResponse
                 };
-                _output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
+                output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
 
-                _output.AddExceptions(ex);
-                _output.AddMensagem("Ocorreu uma falha ao Inserir o Registro!");
+                output.AddExceptions(ex);
+                output.AddMensagem("Ocorreu uma falha ao Inserir o Registro!");
             }
             finally
             {
-                _output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
+                output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
                 _sendLogUseCaseAsync.ExecuteAsync(new LogRequest(request.SysUsuSessionId));
             }
 
-            return _output;
+            return output;
         }
     }
 }

@@ -12,21 +12,19 @@ namespace Service.Grupo.Application.Models.Request.Grupo
 
             ValidadorDeRegra.Novo()
                 .Quando(!IsSysUsuSessionIdValido, Resource.SysUsuSessionIdInvalido)
-                .Quando((Nome == null || Nome.Length < 5 || Nome.Length > 100), Resource.NomeInvalido)
+                .Quando((NomeDoGrupo == null || NomeDoGrupo.Length < 5 || NomeDoGrupo.Length > 100), Resource.NomeInvalido)
                 .DispararExcecaoSeExistir();
         }
-
-        public GetGrupoRequest GetGrupoRequest { get; set; }   
-        public string Nome { get; set; }
+       
+        public string NomeDoGrupo { get; set; }
 
         private InsertGrupoRequest()
         {
         }
 
-        public InsertGrupoRequest(string nome, GetGrupoRequest getGrupoRequest)
+        public InsertGrupoRequest(string nomeDoGrupo)
         {
-            Nome = nome;
-            GetGrupoRequest = getGrupoRequest;
+            NomeDoGrupo = nomeDoGrupo;
 
             Validate();
             

@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System;
-
 namespace Service.Grupo.API
 {
     public static class Program
@@ -12,7 +7,6 @@ namespace Service.Grupo.API
             CreateHostBuilder(args).Build().Run();
 
             Console.ReadKey();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -23,7 +17,9 @@ namespace Service.Grupo.API
 
                     webBuilder
                     .UseStartup<Startup>()
-                    .UseEnvironment(env);
+                    .UseEnvironment(env)
+                    ;
+                    
                 });
     }
 }

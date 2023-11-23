@@ -9,39 +9,40 @@ namespace Service.Grupo.Domain.Entities
     [Table("Grupo")]
     public class Grupo : Base.Base
     {
-        public string Nome { get; set; }
+        public Guid GrupoId { get; set; }   
+        public string NomeDoGrupo { get; set; }
 
         private void Validate()
         {
-            var IsIdValido = Guid.TryParse(Id.ToString(), out Guid idValido);
+            var IsGrupoIdValido = Guid.TryParse(GrupoId.ToString(), out Guid idValido);
             var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid sysUsuSessionIdValido);
 
             ValidadorDeRegra.Novo()
-                .Quando(!IsIdValido, Resource.IdInvalido)
-                .Quando((string.IsNullOrEmpty(Nome) || Nome.Length > 100), Resource.NomeInvalido)
+                .Quando(!IsGrupoIdValido, Resource.IdInvalido)
+                .Quando((string.IsNullOrEmpty(NomeDoGrupo) || NomeDoGrupo.Length > 100), Resource.NomeInvalido)
                 .Quando(!IsSysUsuSessionIdValido, Resource.SysUsuSessionIdInvalido)
                 .DispararExcecaoSeExistir();
         }
 
         public Grupo() { }
 
-        public Grupo(Guid id, string nome, EStatus status, Guid sysUsuSessionId)
+        public Grupo(Guid grupoId, string nomeDoGrupo, EStatus status, Guid sysUsuSessionId)
         {
-            Id = id;
-            Nome = nome;
+            GrupoId = grupoId;
+            NomeDoGrupo = nomeDoGrupo;
             Status = status;
             SysUsuSessionId = sysUsuSessionId;
 
             Validate();
         }
 
-        public Grupo(Guid id)
+        public Grupo(Guid grupoId)
         {
-            var IsIdValido = Guid.TryParse(Id.ToString(), out Guid idValido);
+            var IsIdValido = Guid.TryParse(GrupoId.ToString(), out Guid idValido);
             
             ValidadorDeRegra.Novo().Quando(!IsIdValido, Resource.IdInvalido).DispararExcecaoSeExistir();
 
-            Id = id;
+            GrupoId = grupoId;
         }
 
         public void AlterarNome(string nome)
@@ -50,7 +51,7 @@ namespace Service.Grupo.Domain.Entities
                 .Quando((string.IsNullOrEmpty(nome) || nome.Length > 100), Resource.NomeInvalido)
                 .DispararExcecaoSeExistir();
 
-            Nome = nome;
+            NomeDoGrupo = nome;
         }
     }
 }

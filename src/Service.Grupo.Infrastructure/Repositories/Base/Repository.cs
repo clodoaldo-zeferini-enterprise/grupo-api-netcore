@@ -67,6 +67,10 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
                         returnResults.Add(obj);
                     }
                 }
+                catch (Exception ex)
+                {
+                    string sEx = ex.Message;
+                }
                 finally { con.Close(); con.Dispose(); }
             }
 
@@ -82,6 +86,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
                 con.Open();
                 return await con.QueryAsync<TEntity>(dapperQuery.Query);
             }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return null;
+            }
             finally
             {
                 con.Close();
@@ -95,6 +104,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
             {
                 con.Open();
                 return await con.GetAllAsync<TEntity>();
+            }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return null;
             }
             finally
             {
@@ -110,6 +124,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
                 con.Open();
                 return con.Query<TEntity>(dapperQuery.Query);
             }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return null;
+            }
             finally
             {
                 con.Close();
@@ -123,6 +142,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
             {
                 con.Open();
                 return con.GetAll<TEntity>();
+            }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return null;
             }
             finally
             {
@@ -138,6 +162,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
                 con.Open();
                 return await con.GetAsync<TEntity>(id);
             }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return null;
+            }
             finally
             {
                 con.Close();
@@ -151,6 +180,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
             {
                 con.Open();
                 return con.Get<TEntity>(id);
+            }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return null;
             }
             finally
             {
@@ -175,6 +209,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
 
                 return (result > 0);
             }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return false;
+            }
             finally
             {
                 con.Close();
@@ -188,6 +227,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
             {
                 con.Open();
                 return await con.UpdateAsync<TEntity>(entity);
+            }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return false;
             }
             finally
             {
@@ -203,6 +247,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
                 con.Open();
                 return con.Update<TEntity>(entity);
             }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return false;
+            }
             finally
             {
                 con.Close();
@@ -216,6 +265,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
             {
                 con.Open();
                 return await con.DeleteAsync<TEntity>(entity);
+            }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return false;
             }
             finally
             {
@@ -232,6 +286,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
                 var resultado = (await con.ExecuteAsync(dapperQuery.Query));
                 return resultado;
             }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return -1;
+            }
             finally
             {
                 con.Close();
@@ -246,6 +305,11 @@ namespace Service.Grupo.Infrastructure.Repositories.Base
                 con.Open();
                 var rowsAffected = await con.ExecuteAsync(dapperQuery.Query);
                 return (rowsAffected > 0);
+            }
+            catch (Exception ex)
+            {
+                string sEx = ex.Message;
+                return false;
             }
             finally
             {
