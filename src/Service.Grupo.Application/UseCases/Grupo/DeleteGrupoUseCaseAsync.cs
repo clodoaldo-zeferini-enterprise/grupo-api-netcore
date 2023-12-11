@@ -17,7 +17,7 @@ using Service.Grupo.Domain.Enum;
 
 namespace Service.Grupo.Application.UseCases.Empresa
 {
-    public class DeleteGrupoUseCaseAsync : IUseCaseAsync<DeleteGrupoRequest, EmpresaOutResponse>, IDisposable
+    public class DeleteGrupoUseCaseAsync : IUseCaseAsync<DeleteGrupoRequest, GrupoOutResponse>, IDisposable
     {
         #region IDisposable Support
         public void Dispose()
@@ -31,13 +31,13 @@ namespace Service.Grupo.Application.UseCases.Empresa
             _configuration = null;
             _empresaRepository = null;
             _getGetAuthorizationUseCaseAsync = null;
-            _getEmpresaUseCaseAsync = null;
+            _getGrupoUseCaseAsync = null;
             _sendLogUseCaseAsync = null;
 
-            empresaResponse = null;
+            grupoResponse = null;
             authorizationOutResponse = null;
             authorizationResponse = null;
-            empresaToDelete = null;
+            grupoToDelete = null;
         }
 
         ~DeleteGrupoUseCaseAsync()
@@ -50,20 +50,20 @@ namespace Service.Grupo.Application.UseCases.Empresa
         private IConfiguration _configuration;
         private IGrupoRepository _empresaRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
-        private IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> _getEmpresaUseCaseAsync;
+        private IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> _getGrupoUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private EmpresaOutResponse output;
-        private GrupoResponse empresaResponse;
+        private GrupoOutResponse output;
+        private GrupoResponse grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse authorizationResponse;
-        private Domain.Entities.Grupo empresaToDelete;
+        private Domain.Entities.Grupo grupoToDelete;
 
         public DeleteGrupoUseCaseAsync(
               IConfiguration configuration
             , IGrupoRepository empresaRepository
             , IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> getGetAuthorizationUseCaseAsync
-            , IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> getGrupoUseCaseAsync
+            , IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> getGrupoUseCaseAsync
             , IUseCaseAsync<LogRequest, LogOutResponse> sendLogUseCaseAsync
 
         )
@@ -71,14 +71,14 @@ namespace Service.Grupo.Application.UseCases.Empresa
             _configuration = configuration;
             _empresaRepository = empresaRepository;
             _getGetAuthorizationUseCaseAsync = getGetAuthorizationUseCaseAsync;
-            _getEmpresaUseCaseAsync = getGrupoUseCaseAsync;
+            _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
             output = new();
             output.SetResultado(false);
         }
 
-        public async Task<EmpresaOutResponse> ExecuteAsync(DeleteGrupoRequest request)
+        public async Task<GrupoOutResponse> ExecuteAsync(DeleteGrupoRequest request)
         {
             try
             {
@@ -95,9 +95,9 @@ namespace Service.Grupo.Application.UseCases.Empresa
 
                 var grupoDB = await _empresaRepository.GetById(request.RequestId);
 
-                empresaToDelete = new Domain.Entities.Grupo(grupoDB.SysUsuSessionId, grupoDB.GrupoId, grupoDB.EmpresaId, grupoDB.NomeDoGrupo, EStatus.EXCLUIDO, grupoDB.DataInsert.Value);
+                grupoToDelete = new Domain.Entities.Grupo(grupoDB.SysUsuSessionId, grupoDB.GrupoId, grupoDB.EmpresaId, grupoDB.NomeDoGrupo, EStatus.EXCLUIDO, grupoDB.DataInsert.Value);
 
-                output.SetResultado(await _empresaRepository.Update(empresaToDelete));
+                output.SetResultado(await _empresaRepository.Update(grupoToDelete));
 
                 output.AddMensagem((output.Resultado ? "Registro Excluído com Sucesso!" : "Ocorreu uma falha ao Excluir o Registro!"));
             }

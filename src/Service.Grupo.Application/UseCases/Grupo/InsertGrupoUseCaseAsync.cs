@@ -14,7 +14,7 @@ using Service.Grupo.Application.Base;
 
 namespace Service.Grupo.Application.UseCases.Empresa
 {
-    public class InsertGrupoUseCaseAsync : IUseCaseAsync<InsertGrupoRequest,  EmpresaOutResponse>, IDisposable
+    public class InsertGrupoUseCaseAsync : IUseCaseAsync<InsertGrupoRequest,  GrupoOutResponse>, IDisposable
     {
         #region IDisposable Support
         public void Dispose()
@@ -29,14 +29,14 @@ namespace Service.Grupo.Application.UseCases.Empresa
             _configuration = null;
             _empresaRepository = null;
             _getGetAuthorizationUseCaseAsync = null;
-            _getEmpresaUseCaseAsync = null;
+            _getGrupoUseCaseAsync = null;
             _sendLogUseCaseAsync = null;
 
 
-            empresaResponse = null;
+            grupoResponse = null;
             authorizationOutResponse = null;
             authorizationResponse = null;
-            empresaToInsert = null;
+            grupoToInsert = null;
         }
 
         ~InsertGrupoUseCaseAsync()
@@ -48,33 +48,33 @@ namespace Service.Grupo.Application.UseCases.Empresa
         private IConfiguration _configuration;
         private IGrupoRepository _empresaRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
-        private IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> _getEmpresaUseCaseAsync;
+        private IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> _getGrupoUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private EmpresaOutResponse output;
-        private GrupoResponse         empresaResponse;
+        private GrupoOutResponse output;
+        private GrupoResponse         grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse    authorizationResponse;
-        private Domain.Entities.Grupo empresaToInsert;
+        private Domain.Entities.Grupo grupoToInsert;
 
         public InsertGrupoUseCaseAsync(
               IConfiguration configuration
             , IGrupoRepository empresaRepository
             , IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> getGetAuthorizationUseCaseAsync
-            , IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> getGrupoUseCaseAsync
+            , IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> getGrupoUseCaseAsync
             , IUseCaseAsync<LogRequest, LogOutResponse> sendLogUseCaseAsync
 )
         {
             _configuration = configuration;
             _empresaRepository = empresaRepository;
             _getGetAuthorizationUseCaseAsync = getGetAuthorizationUseCaseAsync;
-            _getEmpresaUseCaseAsync = getGrupoUseCaseAsync;
+            _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
             output = new();
         }
 
-        public async Task<EmpresaOutResponse> ExecuteAsync(InsertGrupoRequest request)
+        public async Task<GrupoOutResponse> ExecuteAsync(InsertGrupoRequest request)
         {
             try
             {
@@ -89,12 +89,12 @@ namespace Service.Grupo.Application.UseCases.Empresa
                     return output;
                 }
 
-                empresaToInsert = new Domain.Entities.Grupo(request.SysUsuSessionId, request.GrupoId, request.NomeDoGrupo);
+                grupoToInsert = new Domain.Entities.Grupo(request.SysUsuSessionId, request.GrupoId, request.NomeDoGrupo);
 
-                if (await _empresaRepository.Insert(empresaToInsert))
+                if (await _empresaRepository.Insert(grupoToInsert))
                 {
                     output.AddMensagem("Registro inserido com Sucesso!");
-                    output.SetData(empresaToInsert);
+                    output.SetData(grupoToInsert);
                     output.SetResultado(true);
                 }
             }

@@ -25,10 +25,10 @@ namespace Service.Grupo.Infrastructure.IoC
 
 
             #region[Registrar Injeção de Dependência - Grupo]
-            services.AddTransient<IUseCaseAsync<DeleteGrupoRequest, EmpresaOutResponse>, DeleteGrupoUseCaseAsync>();
-            services.AddTransient<IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse>, GetGrupoUseCaseAsync>();
-            services.AddTransient<IUseCaseAsync<InsertGrupoRequest, EmpresaOutResponse>, InsertGrupoUseCaseAsync>();
-            services.AddTransient<IUseCaseAsync<UpdateGrupoRequest, EmpresaOutResponse>, UpdateGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<DeleteGrupoRequest, GrupoOutResponse>, DeleteGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<GetGrupoRequest, GrupoOutResponse>, GetGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<InsertGrupoRequest, GrupoOutResponse>, InsertGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<UpdateGrupoRequest, GrupoOutResponse>, UpdateGrupoUseCaseAsync>();
             #endregion[Registrar Injeção de Dependência - Grupo]
 
         }

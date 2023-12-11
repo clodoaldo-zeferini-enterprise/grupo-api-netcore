@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Service.Grupo.Application.UseCases.Empresa
 {
-    public class GetGrupoUseCaseAsync : IUseCaseAsync<GetGrupoRequest,  EmpresaOutResponse>, IDisposable
+    public class GetGrupoUseCaseAsync : IUseCaseAsync<GetGrupoRequest,  GrupoOutResponse>, IDisposable
     {
         #region IDisposable Support
         public void Dispose()
@@ -32,7 +32,7 @@ namespace Service.Grupo.Application.UseCases.Empresa
             _getGetAuthorizationUseCaseAsync = null;
             _sendLogUseCaseAsync = null;
 
-            empresaResponse = null;
+            grupoResponse = null;
             authorizationOutResponse = null;
             authorizationResponse = null;
 
@@ -48,9 +48,9 @@ namespace Service.Grupo.Application.UseCases.Empresa
         private IGrupoRepository _empresaRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
-        private EmpresaOutResponse output;
+        private GrupoOutResponse output;
 
-        private GrupoResponse empresaResponse;
+        private GrupoResponse grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse authorizationResponse;
 
@@ -70,7 +70,7 @@ namespace Service.Grupo.Application.UseCases.Empresa
             output = new();
         }
 
-        public async Task<EmpresaOutResponse> ExecuteAsync(GetGrupoRequest request)
+        public async Task<GrupoOutResponse> ExecuteAsync(GetGrupoRequest request)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Service.Grupo.Application.UseCases.Empresa
                 {
                     Service.Grupo.Domain.Entities.Grupo grupo = await _empresaRepository.GetById(request.EmpresaId.Value);
                     Service.Grupo.Application.Models.Grupo grupoModel = new Models.Grupo(grupo.SysUsuSessionId, request.RequestId, grupo.GrupoId, grupo.EmpresaId, grupo.NomeDoGrupo, (Models.Enum.EStatus)grupo.Status, grupo.DataInsert, grupo.DataUpdate);
-                    empresaResponse = new GrupoResponse(grupoModel);
+                    grupoResponse = new GrupoResponse(grupoModel);
 
                     output.SetResultado(true);
                     output.AddMensagem("Dado recuperado com Sucesso!");
@@ -208,11 +208,11 @@ namespace Service.Grupo.Application.UseCases.Empresa
 
                     if (responseNavigators.Any() && responseEmpresas.Any())
                     {
-                        GrupoResponse empresaResponse = new GrupoResponse(responseNavigators, responseEmpresas);
+                        GrupoResponse grupoResponse = new GrupoResponse(responseNavigators, responseEmpresas);
 
                         output.SetResultado(true);
                         output.AddMensagem("Dados retornados com sucesso!");
-                        output.SetData(empresaResponse);
+                        output.SetData(grupoResponse);
                     }
                     else
                     {

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Service.Grupo.Application.UseCases.Empresa
 {
-    public class UpdateGrupoUseCaseAsync : IUseCaseAsync<UpdateGrupoRequest,  EmpresaOutResponse>, IDisposable
+    public class UpdateGrupoUseCaseAsync : IUseCaseAsync<UpdateGrupoRequest,  GrupoOutResponse>, IDisposable
     {
         #region IDisposable Support
         public void Dispose()
@@ -31,10 +31,10 @@ namespace Service.Grupo.Application.UseCases.Empresa
             _getGrupoUseCaseAsync = null;
             _sendLogUseCaseAsync = null;
 
-            empresaResponse = null;
+            grupoResponse = null;
             authorizationOutResponse = null;
             authorizationResponse = null;
-            empresaToUpdate = null;
+            grupoToUpdate = null;
         }
 
         ~UpdateGrupoUseCaseAsync()
@@ -46,20 +46,20 @@ namespace Service.Grupo.Application.UseCases.Empresa
         private IConfiguration _configuration;
         private IGrupoRepository _empresaRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
-        private IUseCaseAsync<GetGrupoRequest,  EmpresaOutResponse> _getGrupoUseCaseAsync;
+        private IUseCaseAsync<GetGrupoRequest,  GrupoOutResponse> _getGrupoUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private EmpresaOutResponse output;
-        private GrupoResponse empresaResponse;
+        private GrupoOutResponse output;
+        private GrupoResponse grupoResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse authorizationResponse;
-        private Domain.Entities.Grupo empresaToUpdate;
+        private Domain.Entities.Grupo grupoToUpdate;
 
         public UpdateGrupoUseCaseAsync(
               IConfiguration configuration
             , IGrupoRepository empresaRepository
             , IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> getGetAuthorizationUseCaseAsync
-            , IUseCaseAsync<GetGrupoRequest,  EmpresaOutResponse> getGrupoUseCaseAsync
+            , IUseCaseAsync<GetGrupoRequest,  GrupoOutResponse> getGrupoUseCaseAsync
             , IUseCaseAsync<LogRequest, LogOutResponse> sendLogUseCaseAsync
 
         )
@@ -73,7 +73,7 @@ namespace Service.Grupo.Application.UseCases.Empresa
             output = new();
         }
 
-        public async Task<EmpresaOutResponse> ExecuteAsync(UpdateGrupoRequest request)
+        public async Task<GrupoOutResponse> ExecuteAsync(UpdateGrupoRequest request)
         {
             try
             {
@@ -90,12 +90,12 @@ namespace Service.Grupo.Application.UseCases.Empresa
 
                 var empresaFromDB = await _empresaRepository.GetById(request.GrupoId);
 
-                empresaToUpdate = new Domain.Entities.Grupo(request.SysUsuSessionId, empresaFromDB.GrupoId, empresaFromDB.EmpresaId, request.NomeDoGrupo, (Service.Grupo.Domain.Enum.EStatus)request.Status, empresaFromDB.DataInsert.Value);
+                grupoToUpdate = new Domain.Entities.Grupo(request.SysUsuSessionId, empresaFromDB.GrupoId, empresaFromDB.EmpresaId, request.NomeDoGrupo, (Service.Grupo.Domain.Enum.EStatus)request.Status, empresaFromDB.DataInsert.Value);
 
-                if (await _empresaRepository.Update(empresaToUpdate))
+                if (await _empresaRepository.Update(grupoToUpdate))
                 {
                     output.AddMensagem("Registro Alterado com Sucesso!");
-                    output.SetData(empresaToUpdate);
+                    output.SetData(grupoToUpdate);
                     output.SetResultado(true);
                 }
             }
