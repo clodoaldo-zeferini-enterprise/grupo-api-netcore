@@ -1,38 +1,40 @@
 ﻿using Service.Grupo.Application.Base;
-using Service.Grupo.Domain.Enum;
+
 using System;
 
-namespace Service.Grupo.Application.Models.Request.Grupo.Grupo
+namespace Service.Grupo.Application.Models.Request.Grupo
 {
     public class UpdateGrupoRequest : RequestBase
     {
+        public Guid GrupoId { get; private set; }
+        public Guid EmpresaId { get; private set; }        
+        public string NomeDoGrupo { get; private set; }
+
         private void Validate()
         {
-            var IsIdValido = Guid.TryParse(Id.ToString(), out Guid idValido);
-            var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid sysUsuSessionIdValido);
+            var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid isSysUsuSessionIdValido);
+            var IsRequestIdValido = Guid.TryParse(RequestId.ToString(), out Guid isRequestIdValido);
+            var IsGrupoIdValido = Guid.TryParse(GrupoId.ToString(), out Guid isGrupoIdValido);
+            var IsEmpresaIdValido = Guid.TryParse(EmpresaId.ToString(), out Guid isEmpresaIdValido);
 
-            ValidadorDeRegra.Novo()
-                .Quando(!IsSysUsuSessionIdValido, Resource.SysUsuSessionIdInvalido)
-                .Quando(!IsIdValido, Resource.IdInvalido)
-                .Quando((Nome == null || Nome.Length < 5 || Nome.Length > 100), Resource.NomeInvalido)
-                .DispararExcecaoSeExistir();
+            Base.ValidadorDeRegra.Novo()
+                .Quando(!IsSysUsuSessionIdValido, Base.Resource.SysUsuSessionIdInvalido)
+                .Quando(!IsRequestIdValido, Base.Resource.RequestIdInvalido)
+                .Quando(!IsGrupoIdValido, Base.Resource.GrupoIdInvalido)
+                .Quando((string.IsNullOrEmpty(NomeDoGrupo) || NomeDoGrupo.Length > 100), Resource.NomeDoGrupoInvalido)
+                .DispararExcecaoSeExistir();                       
         }
 
-        public Guid Id { get; set; }
-        public EStatus Status { get; set; }
-        public string Nome { get; set; }
-
-        public GetGrupoRequest GetGrupoRequest { get; set; }    
-
-        public UpdateGrupoRequest(Guid id, EStatus status, string nome, GetGrupoRequest getGrupoRequest)
+        public UpdateGrupoRequest(Guid sysUsuSessionId, Guid requestId, Guid grupoId, Guid empresaId, Application.Models.Enum.EStatus status, string nomeDoGrupo)
         {
-            Id = id;
+            SysUsuSessionId = sysUsuSessionId;
+            RequestId = requestId;
+            GrupoId = grupoId;
+            EmpresaId = empresaId;
             Status = status;
-            Nome = nome;
+            NomeDoGrupo = nomeDoGrupo;
 
-            GetGrupoRequest = getGrupoRequest;
-
-            Validate();            
+            Validate();
         }
     }
 }

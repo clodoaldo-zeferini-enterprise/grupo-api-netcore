@@ -8,7 +8,7 @@ namespace Service.Grupo.Application.Models.Response.Errors
 {
     public class ErrorsResponse
     {
-        public List<ErrorResponse> Errors { get; set; }
+        public List<ErrorResponse> Errors { get; private set; }
 
         public ErrorsResponse()
         {

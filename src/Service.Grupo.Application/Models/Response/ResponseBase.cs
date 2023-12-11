@@ -6,19 +6,18 @@ namespace Service.Grupo.Application.Models.Response
 {
     public class ResponseBase : IDisposable
     {
-        public bool Resultado { get; set; }
-             
-        public string Mensagem { get; set; }
-        public List<Mensagem> Mensagens { get; set; }
-        public List<MyException> Exceptions { get; set; }
-        public object Data { get; set; }
+        public bool Resultado { get; private set; }             
+        public string Mensagem { get; private set; }
+        public List<Mensagem> Mensagens { get; private set; }
+        public List<MyException> Exceptions { get; private set; }
+        public object Data { get; private set; }
 
-        public string Request { get; set; }
+        public string Request { get; private set; }
         
-        public Errors.ErrorsResponse ErrorsResponse { get; set; }
+        public Errors.ErrorsResponse ErrorsResponse { get; private set; }
 
         public ResponseBase()
-        {
+        {             
             Mensagens = new List<Mensagem>();
             Exceptions = new List<MyException>(); 
             ErrorsResponse = new Errors.ErrorsResponse();
@@ -33,6 +32,26 @@ namespace Service.Grupo.Application.Models.Response
         public void AddExceptions(Exception exception)
         {
             Exceptions.Add(new MyException(exception));
+        }
+
+        public void SetResultado(bool resultado)
+        {
+            Resultado = resultado;
+        }
+
+        public void SetData(object data)
+        {
+            Data = data;
+        }
+
+        public void SetErrorsResponse(Errors.ErrorsResponse errorsResponse)
+        {
+            ErrorsResponse = errorsResponse;
+        }
+
+        public void SetRequest(string request)
+        {
+            Request = request;
         }
 
         #region IDisposable Support

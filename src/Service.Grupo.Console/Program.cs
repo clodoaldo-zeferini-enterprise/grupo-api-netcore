@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Service.Grupo.Application.Models.Request;
 using Service.Grupo.Application.Models.Request.Grupo;
 using Service.Grupo.Console.Service;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = new ConfigurationBuilder();
         BuildConfig(builder);
@@ -20,9 +19,9 @@ internal class Program
             })
             .Build();
 
-        using (GetGrupoService getGrupoService = new GetGrupoService(host.Services, new GetGrupoRequest(1, 10)))
+        using (InsertGrupoService insertEmpresaService = new InsertGrupoService(host.Services, new InsertGrupoRequest(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "Empresa do Clodoaldo")))
         {
-            getGrupoService.ExecuteAsync();
+            await insertEmpresaService.ExecuteAsync();
         }
     }
 

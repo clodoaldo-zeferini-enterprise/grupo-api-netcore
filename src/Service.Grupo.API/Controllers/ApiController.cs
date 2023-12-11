@@ -27,7 +27,7 @@ namespace Service.Grupo.API.Controllers
                         {
                             errorMessage.Append(erro.ErrorMessage + "\n");
                         }
-                        error.Message = errorMessage.ToString();
+                        error.AddMessage(errorMessage.ToString());
                         errors.Errors.Add(error);
                     }
                 }

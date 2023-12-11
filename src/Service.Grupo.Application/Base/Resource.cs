@@ -2,10 +2,13 @@
 {
     public static class Resource
     {
-        public static string IdInvalido   = "Id inválido";
         public static string SysUsuSessionIdInvalido = "SysUsuSessionId inválido";
-        public static string NomeInvalido = "Nome inválido";
-        public static string JaExixteUmgrupoComEsteNome = "Já existe um grupo com este Nome";
+        public static string RequestIdInvalido = "RequestId inválido";
+
+        public static string GrupoIdInvalido   = "GrupoId inválido";
+        
+        public static string NomeDoGrupoInvalido = "Nome da Empresa inválido";
+        public static string JaExisteUmGrupoComEsteNome = "Já existe um Grupo com este Nome";
 
         public static string PageNumberInvalido = "O Número da Página deverá estar entre 1 e 1000";
         public static string PageSizeInvalido = "O Tamanho da Página deverá estar entre 1 e 100";

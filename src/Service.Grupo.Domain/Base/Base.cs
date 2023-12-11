@@ -5,10 +5,9 @@ namespace Service.Grupo.Domain.Base
 {
     public class Base
     {
-        public Guid Id { get; set; }
-        public EStatus Status { get; set; }
-        public DateTime? DataInsert { get; set; }
-        public DateTime? DataUpdate { get; set; }
-        public Guid SysUsuSessionId { get; set; }
+        public EStatus Status { get; protected set; }
+        public DateTime? DataInsert { get; protected set; }
+        public DateTime? DataUpdate { get; protected set; }
+        public Guid SysUsuSessionId { get; protected set; }
     }
 }

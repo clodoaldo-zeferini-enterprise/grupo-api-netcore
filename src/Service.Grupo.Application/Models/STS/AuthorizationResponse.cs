@@ -8,7 +8,7 @@ namespace Service.Grupo.Application.Models.STS
 {
     public class AuthorizationResponse
     {
-        public bool IsValid { get; set; }
+        public bool IsValid { get; private set; }
 
         private AuthorizationResponse() { }
 

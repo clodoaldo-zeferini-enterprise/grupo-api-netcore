@@ -8,7 +8,7 @@ namespace Service.Grupo.Application.Models.Response.Log
 {
     public class LogResponse
     {
-        public bool IsValid { get; set; }
+        public bool IsValid { get; private set; }
 
         private LogResponse() { }
 

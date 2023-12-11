@@ -4,8 +4,8 @@ namespace Service.Grupo.Application.Models.Response
 {
     public class Mensagem
     {
-        public DateTime DataHora { get; set; }
-        public string Texto { get; set; }
+        public DateTime DataHora { get; private set; }
+        public string Texto { get; private set; }
 
         public Mensagem() { }
 

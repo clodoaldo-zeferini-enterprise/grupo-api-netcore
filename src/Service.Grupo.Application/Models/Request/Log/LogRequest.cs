@@ -4,7 +4,7 @@ namespace Service.Grupo.Application.Models.Request.Log
 {
     public class LogRequest
     {
-        public Guid SysUsuSessionId { get; set; }
+        public Guid SysUsuSessionId { get; private set; }
 
         private LogRequest()
         {

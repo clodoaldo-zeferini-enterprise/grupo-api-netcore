@@ -10,10 +10,14 @@ using Service.Grupo.Repository.Interfaces.Repositories.DB;
 using Service.Grupo.Application.Models.Request.Log;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Service.Grupo.Application.Base;
+using Service.GetAuthorization.Application.UseCases.GetAuthorization;
+using Service.Grupo.Domain.Enum;
 
-namespace Service.Grupo.Application.UseCases.Grupo
+namespace Service.Grupo.Application.UseCases.Empresa
 {
-    public class DeleteGrupoUseCaseAsync : IUseCaseAsync<DeleteGrupoRequest, GrupoOutResponse>, IDisposable
+    public class DeleteGrupoUseCaseAsync : IUseCaseAsync<DeleteGrupoRequest, EmpresaOutResponse>, IDisposable
     {
         #region IDisposable Support
         public void Dispose()
@@ -24,9 +28,16 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
         protected virtual void Dispose(bool disposing)
         {
-            
-            _grupoRepository = null;
-            _getGrupoUseCaseAsync = null;
+            _configuration = null;
+            _empresaRepository = null;
+            _getGetAuthorizationUseCaseAsync = null;
+            _getEmpresaUseCaseAsync = null;
+            _sendLogUseCaseAsync = null;
+
+            empresaResponse = null;
+            authorizationOutResponse = null;
+            authorizationResponse = null;
+            empresaToDelete = null;
         }
 
         ~DeleteGrupoUseCaseAsync()
@@ -37,40 +48,37 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
 
         private IConfiguration _configuration;
-        private IGrupoRepository _grupoRepository;
+        private IGrupoRepository _empresaRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
-        private IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> _getGrupoUseCaseAsync;
+        private IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> _getEmpresaUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private GrupoOutResponse _output;
-        private GrupoResponse grupoResponse;
+        private EmpresaOutResponse output;
+        private GrupoResponse empresaResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse authorizationResponse;
-        private Domain.Entities.Grupo grupoToDelete;
+        private Domain.Entities.Grupo empresaToDelete;
 
         public DeleteGrupoUseCaseAsync(
               IConfiguration configuration
-            , IGrupoRepository grupoRepository
+            , IGrupoRepository empresaRepository
             , IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> getGetAuthorizationUseCaseAsync
-            , IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> getGrupoUseCaseAsync
+            , IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> getGrupoUseCaseAsync
             , IUseCaseAsync<LogRequest, LogOutResponse> sendLogUseCaseAsync
 
         )
         {
             _configuration = configuration;
-            _grupoRepository = grupoRepository;
+            _empresaRepository = empresaRepository;
             _getGetAuthorizationUseCaseAsync = getGetAuthorizationUseCaseAsync;
-            _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
+            _getEmpresaUseCaseAsync = getGrupoUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
-            _output = new()
-            {
-                Resultado = false,
-                Mensagem = "Dados Fornecidos são inválidos!"
-            };
+            output = new();
+            output.SetResultado(false);
         }
 
-        public async Task<GrupoOutResponse> ExecuteAsync(DeleteGrupoRequest request)
+        public async Task<EmpresaOutResponse> ExecuteAsync(DeleteGrupoRequest request)
         {
             try
             {
@@ -78,41 +86,37 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
                 if (!authorizationOutResponse.Resultado)
                 {
-                    _output.Resultado = false;
-                    _output.Mensagem = "Ocorreu uma falha na Autorização!";
-                    _output.Data = null;
+                    output.SetResultado(false);
+                    output.AddMensagem("Ocorreu uma falha na Autorização!");
+                    output.SetData(authorizationOutResponse.Data);
 
-                    return _output;
+                    return output;
                 }
 
-                grupoToDelete = await _grupoRepository.GetById(request.Id);
-                grupoToDelete.DataUpdate = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                grupoToDelete.SysUsuSessionId = request.SysUsuSessionId;
-                grupoToDelete.Status = Domain.Enum.EStatus.EXCLUIDO;
+                var grupoDB = await _empresaRepository.GetById(request.RequestId);
 
-                _output.Resultado = await _grupoRepository.Update(grupoToDelete);
+                empresaToDelete = new Domain.Entities.Grupo(grupoDB.SysUsuSessionId, grupoDB.GrupoId, grupoDB.EmpresaId, grupoDB.NomeDoGrupo, EStatus.EXCLUIDO, grupoDB.DataInsert.Value);
 
-                _output.Mensagem = (_output.Resultado ? "Registro Excluído com Sucesso!" : "Ocorreu uma falha ao Excluir o Registro!");
+                output.SetResultado(await _empresaRepository.Update(empresaToDelete));
+
+                output.AddMensagem((output.Resultado ? "Registro Excluído com Sucesso!" : "Ocorreu uma falha ao Excluir o Registro!"));
             }
             catch (Exception ex)
             {
-                Models.Response.Errors.ErrorResponse errorResponse = new("id", "parameter", JsonConvert.SerializeObject(ex, Formatting.Indented));
-                System.Collections.Generic.List<Models.Response.Errors.ErrorResponse> errorResponses = new()
-                {
-                    errorResponse
-                };
-                _output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
-
-                _output.AddExceptions(ex);
-                _output.Mensagem = "Ocorreu uma falha ao Excluir o Registro!";
+                output.AddMensagem("Ocorreram Exceções durante a execução");
+                output.AddExceptions(ex);
+                Service.Grupo.Application.Models.Response.Errors.ErrorResponse errorResponse = new Service.Grupo.Application.Models.Response.Errors.ErrorResponse("id", "parameter", JsonConvert.SerializeObject(ex, Formatting.Indented));
+                List<Service.Grupo.Application.Models.Response.Errors.ErrorResponse> errorResponses = new List<Service.Grupo.Application.Models.Response.Errors.ErrorResponse>();
+                errorResponses.Add(errorResponse);
+                output.SetErrorsResponse(new Service.Grupo.Application.Models.Response.Errors.ErrorsResponse(errorResponses));
             }
             finally
             {
-                _output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
+                output.SetRequest(JsonConvert.SerializeObject(request, Formatting.Indented));
                 _sendLogUseCaseAsync.ExecuteAsync(new LogRequest(request.SysUsuSessionId));
             }
 
-            return _output;
+            return output;
         }
     }
 }

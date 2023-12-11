@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Service.GetAuthorization.Application.UseCases.GetAuthorization;
 using Service.Grupo.Application.Interfaces;
 using Service.Grupo.Application.Models.Request.Grupo;
-using Service.Grupo.Application.Models.Request.Grupo.Grupo;
 using Service.Grupo.Application.Models.Request.Log;
 using Service.Grupo.Application.Models.Request.STS;
 using Service.Grupo.Application.Models.Response;
-using Service.Grupo.Application.UseCases.Grupo;
+using Service.Grupo.Application.UseCases.Empresa;
 using Service.Grupo.Application.UseCases.Log;
 using Service.Grupo.Infrastructure.Repositories.DB;
 using Service.Grupo.Repository.Interfaces.Repositories.DB;
+using Service.GetAuthorization.Application.UseCases.GetAuthorization;
 
 
 namespace Service.Grupo.Infrastructure.IoC
@@ -26,10 +25,10 @@ namespace Service.Grupo.Infrastructure.IoC
 
 
             #region[Registrar Injeção de Dependência - Grupo]
-            services.AddTransient<IUseCaseAsync<DeleteGrupoRequest, GrupoOutResponse>, DeleteGrupoUseCaseAsync>();
-            services.AddTransient<IUseCaseAsync<GetGrupoRequest, GrupoOutResponse>, GetGrupoUseCaseAsync>();
-            services.AddTransient<IUseCaseAsync<InsertGrupoRequest, GrupoOutResponse>, InsertGrupoUseCaseAsync>();
-            services.AddTransient<IUseCaseAsync<UpdateGrupoRequest, GrupoOutResponse>, UpdateGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<DeleteGrupoRequest, EmpresaOutResponse>, DeleteGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse>, GetGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<InsertGrupoRequest, EmpresaOutResponse>, InsertGrupoUseCaseAsync>();
+            services.AddTransient<IUseCaseAsync<UpdateGrupoRequest, EmpresaOutResponse>, UpdateGrupoUseCaseAsync>();
             #endregion[Registrar Injeção de Dependência - Grupo]
 
         }

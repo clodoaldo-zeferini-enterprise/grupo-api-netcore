@@ -2,10 +2,10 @@
 {
     public class Navigator
     {
-        public int RecordCount { get; set; }
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
-        public int PageCount { get; set; }
+        public int RecordCount { get; private set; }
+        public int PageNumber { get; private set; }
+        public int PageSize { get; private set; }
+        public int PageCount { get; private set; }
 
         public Navigator()
         {

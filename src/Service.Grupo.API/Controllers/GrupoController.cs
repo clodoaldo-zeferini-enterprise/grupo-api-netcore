@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Grupo.Application.Interfaces;
 using Service.Grupo.Application.Models.Request.Grupo;
-using Service.Grupo.Application.Models.Request.Grupo.Grupo;
 using Service.Grupo.Application.Models.Response;
-using Service.Grupo.Application.Models.Response.Errors;
 
 namespace Service.Grupo.API.Controllers
 {
@@ -11,25 +9,28 @@ namespace Service.Grupo.API.Controllers
     [ApiController]
     public class GrupoController : ApiController
     {
-        private readonly IUseCaseAsync<DeleteGrupoRequest, GrupoOutResponse> _deleteGrupoUseCaseAsync;
-        private readonly IUseCaseAsync<GetGrupoRequest, GrupoOutResponse>    _getGrupoUseCaseAsync;
-        private readonly IUseCaseAsync<InsertGrupoRequest, GrupoOutResponse> _insertGrupoUseCaseAsync;
-        private readonly IUseCaseAsync<UpdateGrupoRequest, GrupoOutResponse> _updateGrupoUseCaseAsync;
+        private readonly IUseCaseAsync<DeleteGrupoRequest, EmpresaOutResponse> _deleteEmpresaUseCaseAsync;
+        private readonly IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse>    _getEmpresaUseCaseAsync;
+        private readonly IUseCaseAsync<InsertGrupoRequest, EmpresaOutResponse> _insertEmpresaUseCaseAsync;
+        private readonly IUseCaseAsync<UpdateGrupoRequest, EmpresaOutResponse> _updateEmpresaUseCaseAsync;
         private readonly IConfiguration _configuration;
 
+        private readonly ILogger<GrupoController> _logger;
         public GrupoController(
             IConfiguration configuration,
-            IUseCaseAsync<DeleteGrupoRequest, GrupoOutResponse> deleteGrupoUseCaseAsync,
-            IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> getGrupoUseCaseAsync,
-            IUseCaseAsync<InsertGrupoRequest, GrupoOutResponse> insertGrupoUseCaseAsync,
-            IUseCaseAsync<UpdateGrupoRequest, GrupoOutResponse> updateGrupoUseCaseAsync
+            ILogger<GrupoController> logger,
+            IUseCaseAsync<DeleteGrupoRequest, EmpresaOutResponse> deleteEmpresaUseCaseAsync,
+            IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> getEmpresaUseCaseAsync,
+            IUseCaseAsync<InsertGrupoRequest, EmpresaOutResponse> insertEmpresaUseCaseAsync,
+            IUseCaseAsync<UpdateGrupoRequest, EmpresaOutResponse> updateEmpresaUseCaseAsync
             )
         {
             _configuration = configuration;
-            _deleteGrupoUseCaseAsync = deleteGrupoUseCaseAsync;
-            _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
-            _insertGrupoUseCaseAsync = insertGrupoUseCaseAsync;
-            _updateGrupoUseCaseAsync = updateGrupoUseCaseAsync;
+            _logger = logger;   
+            _deleteEmpresaUseCaseAsync = deleteEmpresaUseCaseAsync;
+            _getEmpresaUseCaseAsync = getEmpresaUseCaseAsync;
+            _insertEmpresaUseCaseAsync = insertEmpresaUseCaseAsync;
+            _updateEmpresaUseCaseAsync = updateEmpresaUseCaseAsync;
         }
 
         [HttpGet("Get")]
@@ -37,8 +38,9 @@ namespace Service.Grupo.API.Controllers
         {
             try
             {
-                using GrupoOutResponse grupoOutResponse = await _getGrupoUseCaseAsync.ExecuteAsync(request);
-                return Ok(grupoOutResponse);
+                _logger.LogInformation("HTTP GET: Called get method of WeatherForecast contorller");
+                using EmpresaOutResponse EmpresaOutResponse = await _getEmpresaUseCaseAsync.ExecuteAsync(request);
+                return Ok(EmpresaOutResponse);
             }
             catch (Exception)
             {
@@ -46,7 +48,7 @@ namespace Service.Grupo.API.Controllers
                 return StatusCode(500, ControllerContext.ModelState);
             }
         }
-
+         
         [HttpPost("Post")]
         public async Task<IActionResult> Post([FromBody] InsertGrupoRequest request)
         {
@@ -55,8 +57,8 @@ namespace Service.Grupo.API.Controllers
                 if (request == null)
                     return BadRequest();
 
-                using GrupoOutResponse grupoOutResponse = await _insertGrupoUseCaseAsync.ExecuteAsync(request);
-                return Ok(grupoOutResponse);
+                using EmpresaOutResponse EmpresaOutResponse = await _insertEmpresaUseCaseAsync.ExecuteAsync(request);
+                return Ok(EmpresaOutResponse);
             }
             catch (Exception)
             {
@@ -73,8 +75,8 @@ namespace Service.Grupo.API.Controllers
                 if (request == null)
                     return BadRequest();
 
-                using GrupoOutResponse grupoOutResponse = await _updateGrupoUseCaseAsync.ExecuteAsync(request);
-                return Ok(grupoOutResponse);
+                using EmpresaOutResponse EmpresaOutResponse = await _updateEmpresaUseCaseAsync.ExecuteAsync(request);
+                return Ok(EmpresaOutResponse);
             }
             catch (Exception)
             {
@@ -91,8 +93,8 @@ namespace Service.Grupo.API.Controllers
                 if (request == null)
                     return BadRequest();
 
-                using GrupoOutResponse grupoOutResponse = await _deleteGrupoUseCaseAsync.ExecuteAsync(request);
-                return Ok(grupoOutResponse);
+                using EmpresaOutResponse EmpresaOutResponse = await _deleteEmpresaUseCaseAsync.ExecuteAsync(request);
+                return Ok(EmpresaOutResponse);
             }
             catch (Exception)
             {

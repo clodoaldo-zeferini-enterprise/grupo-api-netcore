@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "15be2574-0b36-46c7-a32b-dbbd44fa144a",
-		"name": "API Grupo - appsettings.dev.json",
+		"name": "API Empresa - appsettings.dev.json",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "3548314"
 	},
@@ -13,25 +13,25 @@
 					"name": "v1",
 					"item": [
 						{
-							"name": "Grupo",
+							"name": "Empresa",
 							"item": [
 								{
 									"name": "Get",
 									"item": [
 										{
-											"name": "/api/v1/Grupo/Get",
+											"name": "/api/v1/Empresa/Get",
 											"request": {
 												"method": "GET",
 												"header": [],
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/Grupo/Get?PageNumber=<integer>&PageSize=<integer>&Id=<uuid>&FiltraNome=<boolean>&FiltroNome=<string>&FiltraDataInsert=<boolean>&DataInicial=<dateTime>&DataFinal=<dateTime>&FiltraStatus=<boolean>&Status=1&SysUsuSessionId=<uuid>",
+													"raw": "{{baseUrl}}/api/v1/Empresa/Get?PageNumber=<integer>&PageSize=<integer>&Id=<uuid>&FiltraNome=<boolean>&FiltroNome=<string>&FiltraDataInsert=<boolean>&DataInicial=<dateTime>&DataFinal=<dateTime>&FiltraStatus=<boolean>&Status=1&SysUsuSessionId=<uuid>",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
-														"Grupo",
+														"Empresa",
 														"Get"
 													],
 													"query": [
@@ -89,14 +89,14 @@
 														"method": "GET",
 														"header": [],
 														"url": {
-															"raw": "{{baseUrl}}/api/v1/Grupo/Get?PageNumber=<integer>&PageSize=<integer>&Id=<uuid>&FiltraNome=<boolean>&FiltroNome=<string>&FiltraDataInsert=<boolean>&DataInicial=<dateTime>&DataFinal=<dateTime>&FiltraStatus=<boolean>&Status=1&SysUsuSessionId=<uuid>",
+															"raw": "{{baseUrl}}/api/v1/Empresa/Get?PageNumber=<integer>&PageSize=<integer>&Id=<uuid>&FiltraNome=<boolean>&FiltroNome=<string>&FiltraDataInsert=<boolean>&DataInicial=<dateTime>&DataFinal=<dateTime>&FiltraStatus=<boolean>&Status=1&SysUsuSessionId=<uuid>",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"api",
 																"v1",
-																"Grupo",
+																"Empresa",
 																"Get"
 															],
 															"query": [
@@ -162,7 +162,7 @@
 									"name": "Post",
 									"item": [
 										{
-											"name": "/api/v1/Grupo/Post",
+											"name": "/api/v1/Empresa/Post",
 											"request": {
 												"method": "POST",
 												"header": [
@@ -182,14 +182,14 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/Grupo/Post",
+													"raw": "{{baseUrl}}/api/v1/Empresa/Post",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
-														"Grupo",
+														"Empresa",
 														"Post"
 													]
 												}
@@ -216,14 +216,14 @@
 															}
 														},
 														"url": {
-															"raw": "{{baseUrl}}/api/v1/Grupo/Post",
+															"raw": "{{baseUrl}}/api/v1/Empresa/Post",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"api",
 																"v1",
-																"Grupo",
+																"Empresa",
 																"Post"
 															]
 														}
@@ -243,7 +243,7 @@
 									"name": "Put",
 									"item": [
 										{
-											"name": "/api/v1/Grupo/Put",
+											"name": "/api/v1/Empresa/Put",
 											"request": {
 												"method": "PUT",
 												"header": [
@@ -263,14 +263,14 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/Grupo/Put?id=<long>",
+													"raw": "{{baseUrl}}/api/v1/Empresa/Put?id=<long>",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
-														"Grupo",
+														"Empresa",
 														"Put"
 													],
 													"query": [
@@ -303,14 +303,14 @@
 															}
 														},
 														"url": {
-															"raw": "{{baseUrl}}/api/v1/Grupo/Put?id=<long>",
+															"raw": "{{baseUrl}}/api/v1/Empresa/Put?id=<long>",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"api",
 																"v1",
-																"Grupo",
+																"Empresa",
 																"Put"
 															],
 															"query": [
@@ -336,7 +336,7 @@
 									"name": "Delete",
 									"item": [
 										{
-											"name": "/api/v1/Grupo/Delete",
+											"name": "/api/v1/Empresa/Delete",
 											"request": {
 												"method": "DELETE",
 												"header": [
@@ -356,14 +356,14 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/Grupo/Delete?id=9347650a-525d-43f1-ad9b-fb0a574bde93",
+													"raw": "{{baseUrl}}/api/v1/Empresa/Delete?id=9347650a-525d-43f1-ad9b-fb0a574bde93",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
-														"Grupo",
+														"Empresa",
 														"Delete"
 													],
 													"query": [
@@ -396,14 +396,14 @@
 															}
 														},
 														"url": {
-															"raw": "{{baseUrl}}/api/v1/Grupo/Delete?id=<long>",
+															"raw": "{{baseUrl}}/api/v1/Empresa/Delete?id=<long>",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"api",
 																"v1",
-																"Grupo",
+																"Empresa",
 																"Delete"
 															],
 															"query": [

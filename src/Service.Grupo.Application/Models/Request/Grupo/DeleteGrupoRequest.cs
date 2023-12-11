@@ -4,32 +4,35 @@ namespace Service.Grupo.Application.Models.Request.Grupo
 {
     public class DeleteGrupoRequest : RequestBase
     {
-        public Guid Id { get; set; }
-        public GetGrupoRequest GetGrupoRequest { get; set; }
+        public Guid GrupoId { get; private set; }
+        public Guid EmpresaId { get; private set; }
+        
 
-        private DeleteGrupoRequest()
-        {
-        }
+        private DeleteGrupoRequest() {}
 
         private void Validate()
         {
-            var IsIdValido = Guid.TryParse(Id.ToString(), out Guid idValido);
-            var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid sysUsuSessionIdValido);
+            var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid isSysUsuSessionIdValido);
+            var IsRequestIdValido = Guid.TryParse(RequestId.ToString(), out Guid isRequestIdValido);
+            var IsGrupoIdValido = Guid.TryParse(GrupoId.ToString(), out Guid isGrupoIdValido);
+            var IsEmpresaIdValido = Guid.TryParse(EmpresaId.ToString(), out Guid isEmpresaIdValido);
+            
 
             Base.ValidadorDeRegra.Novo()
-                .Quando(!IsIdValido, Base.Resource.IdInvalido)
                 .Quando(!IsSysUsuSessionIdValido, Base.Resource.SysUsuSessionIdInvalido)
+                .Quando(!IsRequestIdValido, Base.Resource.RequestIdInvalido)
+                .Quando(!IsGrupoIdValido, Base.Resource.GrupoIdInvalido)
                 .DispararExcecaoSeExistir();
         }
 
-
-        public DeleteGrupoRequest(Guid id, Guid sysUsuSessionId, GetGrupoRequest getGrupoRequest)
+        public DeleteGrupoRequest(Guid sysUsuSessionId, Guid requestId, Guid grupoId, Guid empresaId)
         {
-            Id = id;
             SysUsuSessionId = sysUsuSessionId;
+            RequestId = requestId;
+            GrupoId = grupoId;
+            EmpresaId = empresaId;
 
             Validate();
-            GetGrupoRequest = getGrupoRequest;
         }
     }
 }

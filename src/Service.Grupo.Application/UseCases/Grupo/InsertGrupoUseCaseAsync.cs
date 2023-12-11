@@ -10,10 +10,11 @@ using Service.Grupo.Repository.Interfaces.Repositories.DB;
 using Service.Grupo.Application.Models.Request.Log;
 using System;
 using System.Threading.Tasks;
+using Service.Grupo.Application.Base;
 
-namespace Service.Grupo.Application.UseCases.Grupo
+namespace Service.Grupo.Application.UseCases.Empresa
 {
-    public class InsertGrupoUseCaseAsync : IUseCaseAsync<InsertGrupoRequest,  GrupoOutResponse>, IDisposable
+    public class InsertGrupoUseCaseAsync : IUseCaseAsync<InsertGrupoRequest,  EmpresaOutResponse>, IDisposable
     {
         #region IDisposable Support
         public void Dispose()
@@ -24,8 +25,18 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
         protected virtual void Dispose(bool disposing)
         {
-            
-            _grupoRepository = null;
+
+            _configuration = null;
+            _empresaRepository = null;
+            _getGetAuthorizationUseCaseAsync = null;
+            _getEmpresaUseCaseAsync = null;
+            _sendLogUseCaseAsync = null;
+
+
+            empresaResponse = null;
+            authorizationOutResponse = null;
+            authorizationResponse = null;
+            empresaToInsert = null;
         }
 
         ~InsertGrupoUseCaseAsync()
@@ -35,39 +46,35 @@ namespace Service.Grupo.Application.UseCases.Grupo
         #endregion
 
         private IConfiguration _configuration;
-        private IGrupoRepository _grupoRepository;
+        private IGrupoRepository _empresaRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
-        private IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> _getGrupoUseCaseAsync;
+        private IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> _getEmpresaUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private GrupoOutResponse _output;
-        private GrupoResponse         grupoResponse;
+        private EmpresaOutResponse output;
+        private GrupoResponse         empresaResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse    authorizationResponse;
-        private Domain.Entities.Grupo grupoToInsert;
+        private Domain.Entities.Grupo empresaToInsert;
 
         public InsertGrupoUseCaseAsync(
               IConfiguration configuration
-            , IGrupoRepository grupoRepository
+            , IGrupoRepository empresaRepository
             , IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> getGetAuthorizationUseCaseAsync
-            , IUseCaseAsync<GetGrupoRequest, GrupoOutResponse> getGrupoUseCaseAsync
+            , IUseCaseAsync<GetGrupoRequest, EmpresaOutResponse> getGrupoUseCaseAsync
             , IUseCaseAsync<LogRequest, LogOutResponse> sendLogUseCaseAsync
 )
         {
             _configuration = configuration;
-            _grupoRepository = grupoRepository;
+            _empresaRepository = empresaRepository;
             _getGetAuthorizationUseCaseAsync = getGetAuthorizationUseCaseAsync;
-            _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
+            _getEmpresaUseCaseAsync = getGrupoUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
-            _output = new()
-            {
-                Resultado = false,
-                Mensagem = "Dados Fornecidos são inválidos!"
-            };
+            output = new();
         }
 
-        public async Task<GrupoOutResponse> ExecuteAsync(InsertGrupoRequest request)
+        public async Task<EmpresaOutResponse> ExecuteAsync(InsertGrupoRequest request)
         {
             try
             {
@@ -75,24 +82,20 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
                 if (!authorizationOutResponse.Resultado)
                 {
-                    _output.Resultado = false;
-                    _output.Mensagem = "Ocorreu uma falha na Autorização!";
-                    _output.Data = null;
+                    output.SetResultado(false);
+                    output.AddMensagem("Ocorreu uma falha na Autorização!");
+                    output.SetData(authorizationOutResponse.Data);
 
-                    return _output;
+                    return output;
                 }
 
-                grupoToInsert = new Domain.Entities.Grupo(Guid.NewGuid());
-                grupoToInsert.SysUsuSessionId = request.SysUsuSessionId;
-                grupoToInsert.Status = Domain.Enum.EStatus.ATIVO;
-                grupoToInsert.DataInsert = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                grupoToInsert.Nome = request.Nome;
+                empresaToInsert = new Domain.Entities.Grupo(request.SysUsuSessionId, request.GrupoId, request.NomeDoGrupo);
 
-                if (await _grupoRepository.Insert(grupoToInsert))
+                if (await _empresaRepository.Insert(empresaToInsert))
                 {
-                    _output.Mensagem  = "Registro inserido com Sucesso!";
-                    _output.Data = await _getGrupoUseCaseAsync.ExecuteAsync(request.GetGrupoRequest);
-                    _output.Resultado = true;
+                    output.AddMensagem("Registro inserido com Sucesso!");
+                    output.SetData(empresaToInsert);
+                    output.SetResultado(true);
                 }
             }
             catch (Exception ex)
@@ -102,18 +105,18 @@ namespace Service.Grupo.Application.UseCases.Grupo
                 {
                     errorResponse
                 };
-                _output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
+                output.SetErrorsResponse(new Models.Response.Errors.ErrorsResponse(errorResponses));
 
-                _output.AddExceptions(ex);
-                _output.AddMensagem("Ocorreu uma falha ao Inserir o Registro!");
+                output.AddExceptions(ex);
+                output.AddMensagem("Ocorreu uma falha ao Inserir o Registro!");
             }
             finally
             {
-                _output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
+                output.SetRequest(JsonConvert.SerializeObject(request, Formatting.Indented));
                 _sendLogUseCaseAsync.ExecuteAsync(new LogRequest(request.SysUsuSessionId));
             }
 
-            return _output;
+            return output;
         }
     }
 }

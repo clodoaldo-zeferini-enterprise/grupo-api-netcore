@@ -3,18 +3,18 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Service.Grupo.Application.Interfaces;
 using Service.Grupo.Application.Models.Request.Grupo;
-using Service.Grupo.Application.Models.Request.Grupo.Grupo;
+using Service.Grupo.Application.Models.Request.Log;
 using Service.Grupo.Application.Models.Request.STS;
 using Service.Grupo.Application.Models.Response;
 using Service.Grupo.Application.Models.STS;
 using Service.Grupo.Repository.Interfaces.Repositories.DB;
-using Service.Grupo.Application.Models.Request.Log;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-namespace Service.Grupo.Application.UseCases.Grupo
+namespace Service.Grupo.Application.UseCases.Empresa
 {
-    public class UpdateGrupoUseCaseAsync : IUseCaseAsync<UpdateGrupoRequest,  GrupoOutResponse>, IDisposable
+    public class UpdateGrupoUseCaseAsync : IUseCaseAsync<UpdateGrupoRequest,  EmpresaOutResponse>, IDisposable
     {
         #region IDisposable Support
         public void Dispose()
@@ -25,9 +25,16 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
         protected virtual void Dispose(bool disposing)
         {
-            
-            _grupoRepository = null;
+            _configuration = null;
+            _empresaRepository = null;
+            _getGetAuthorizationUseCaseAsync = null;
             _getGrupoUseCaseAsync = null;
+            _sendLogUseCaseAsync = null;
+
+            empresaResponse = null;
+            authorizationOutResponse = null;
+            authorizationResponse = null;
+            empresaToUpdate = null;
         }
 
         ~UpdateGrupoUseCaseAsync()
@@ -37,40 +44,36 @@ namespace Service.Grupo.Application.UseCases.Grupo
         #endregion
 
         private IConfiguration _configuration;
-        private IGrupoRepository _grupoRepository;
+        private IGrupoRepository _empresaRepository;
         private IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> _getGetAuthorizationUseCaseAsync;
-        private IUseCaseAsync<GetGrupoRequest,  GrupoOutResponse> _getGrupoUseCaseAsync;
+        private IUseCaseAsync<GetGrupoRequest,  EmpresaOutResponse> _getGrupoUseCaseAsync;
         private IUseCaseAsync<LogRequest, LogOutResponse> _sendLogUseCaseAsync;
 
-        private readonly  GrupoOutResponse _output;
-        private GrupoResponse grupoResponse;
+        private EmpresaOutResponse output;
+        private GrupoResponse empresaResponse;
         private AuthorizationOutResponse authorizationOutResponse;
         private AuthorizationResponse authorizationResponse;
-        private Domain.Entities.Grupo grupoToUpdate;
+        private Domain.Entities.Grupo empresaToUpdate;
 
         public UpdateGrupoUseCaseAsync(
               IConfiguration configuration
-            , IGrupoRepository grupoRepository
+            , IGrupoRepository empresaRepository
             , IUseCaseAsync<AuthorizationRequest, AuthorizationOutResponse> getGetAuthorizationUseCaseAsync
-            , IUseCaseAsync<GetGrupoRequest,  GrupoOutResponse> getGrupoUseCaseAsync
+            , IUseCaseAsync<GetGrupoRequest,  EmpresaOutResponse> getGrupoUseCaseAsync
             , IUseCaseAsync<LogRequest, LogOutResponse> sendLogUseCaseAsync
 
         )
         {   
             _configuration = configuration;
-            _grupoRepository = grupoRepository;
+            _empresaRepository = empresaRepository;
             _getGetAuthorizationUseCaseAsync = getGetAuthorizationUseCaseAsync;
             _getGrupoUseCaseAsync = getGrupoUseCaseAsync;
             _sendLogUseCaseAsync = sendLogUseCaseAsync;
 
-            _output = new()
-            {
-                Resultado = false,
-                Mensagem = "Dados Fornecidos são inválidos!"
-            };
+            output = new();
         }
 
-        public async Task< GrupoOutResponse> ExecuteAsync(UpdateGrupoRequest request)
+        public async Task<EmpresaOutResponse> ExecuteAsync(UpdateGrupoRequest request)
         {
             try
             {
@@ -78,26 +81,22 @@ namespace Service.Grupo.Application.UseCases.Grupo
 
                 if (!authorizationOutResponse.Resultado)
                 {
-                    _output.Resultado = false;
-                    _output.Mensagem = "Ocorreu uma falha na Autorização!";
-                    _output.Data = null;
+                    output.SetResultado(false);
+                    output.AddMensagem("Ocorreu uma falha na Autorização!");
+                    output.SetData(authorizationOutResponse.Data);
 
-                    return _output;
+                    return output;
                 }
 
-                grupoToUpdate = await _grupoRepository.GetById(request.Id);
+                var empresaFromDB = await _empresaRepository.GetById(request.GrupoId);
 
-                grupoToUpdate.Nome = request.Nome;
-                grupoToUpdate.Status = request.Status;
-                grupoToUpdate.SysUsuSessionId = request.SysUsuSessionId;
+                empresaToUpdate = new Domain.Entities.Grupo(request.SysUsuSessionId, empresaFromDB.GrupoId, empresaFromDB.EmpresaId, request.NomeDoGrupo, (Service.Grupo.Domain.Enum.EStatus)request.Status, empresaFromDB.DataInsert.Value);
 
-                grupoToUpdate.DataUpdate = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-
-                if (await _grupoRepository.Update(grupoToUpdate))
+                if (await _empresaRepository.Update(empresaToUpdate))
                 {
-                    _output.AddMensagem("Registro Alterado com Sucesso!");
-                    _output.Data = await _getGrupoUseCaseAsync.ExecuteAsync(request.GetGrupoRequest);
-                    _output.Resultado = true;
+                    output.AddMensagem("Registro Alterado com Sucesso!");
+                    output.SetData(empresaToUpdate);
+                    output.SetResultado(true);
                 }
             }
             catch (Exception ex)
@@ -108,18 +107,18 @@ namespace Service.Grupo.Application.UseCases.Grupo
                 {
                     errorResponse
                 };
-                _output.ErrorsResponse = new Models.Response.Errors.ErrorsResponse(errorResponses);
+                output.SetErrorsResponse(new Models.Response.Errors.ErrorsResponse(errorResponses));
 
-                _output.AddExceptions(ex);
-                _output.AddMensagem("Ocorreu uma falha ao Atualizar o Registro!");
+                output.AddExceptions(ex);
+                output.AddMensagem("Ocorreu uma falha ao Atualizar o Registro!");
             }
             finally
             {
-                _output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
+                output.SetRequest(JsonConvert.SerializeObject(request, Formatting.Indented));
                 _sendLogUseCaseAsync.ExecuteAsync(new LogRequest(request.SysUsuSessionId));
             }
 
-            return _output;
+            return output;
         }
     }
 }

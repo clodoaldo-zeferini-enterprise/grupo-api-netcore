@@ -4,7 +4,7 @@ namespace Service.Grupo.Application.Models.Request.STS
 {
     public class AuthorizationRequest
     {
-        public Guid SysUsuSessionId { get; set; }
+        public Guid SysUsuSessionId { get; private set; }
 
         private AuthorizationRequest()
         {

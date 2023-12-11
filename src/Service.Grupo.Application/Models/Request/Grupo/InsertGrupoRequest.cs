@@ -6,30 +6,38 @@ namespace Service.Grupo.Application.Models.Request.Grupo
 {
     public class InsertGrupoRequest : RequestBase
     {
+        public Guid GrupoId { get; private set; }
+        public Guid EmpresaId { get; private set; }
+        public string NomeDoGrupo { get; private set; }        
+
         private void Validate()
         {
-            var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid sysUsuSessionIdValido);
+            var IsSysUsuSessionIdValido = Guid.TryParse(SysUsuSessionId.ToString(), out Guid isSysUsuSessionIdValido);
+            var IsRequestIdValido = Guid.TryParse(RequestId.ToString(), out Guid isRequestIdValido);
+            var IsGrupoIdValido = Guid.TryParse(GrupoId.ToString(), out Guid isGrupoIdValido);
+            var IsEmpresaIdValido = Guid.TryParse(EmpresaId.ToString(), out Guid isEmpresaIdValido);
 
-            ValidadorDeRegra.Novo()
-                .Quando(!IsSysUsuSessionIdValido, Resource.SysUsuSessionIdInvalido)
-                .Quando((Nome == null || Nome.Length < 5 || Nome.Length > 100), Resource.NomeInvalido)
+            Base.ValidadorDeRegra.Novo()
+                .Quando(!IsSysUsuSessionIdValido, Base.Resource.SysUsuSessionIdInvalido)
+                .Quando(!IsRequestIdValido, Base.Resource.RequestIdInvalido)
+                .Quando(!IsGrupoIdValido, Base.Resource.GrupoIdInvalido)
+                .Quando((string.IsNullOrEmpty(NomeDoGrupo) || NomeDoGrupo.Length > 100), Resource.NomeDoGrupoInvalido)
                 .DispararExcecaoSeExistir();
         }
-
-        public GetGrupoRequest GetGrupoRequest { get; set; }   
-        public string Nome { get; set; }
 
         private InsertGrupoRequest()
         {
         }
 
-        public InsertGrupoRequest(string nome, GetGrupoRequest getGrupoRequest)
+        public InsertGrupoRequest(Guid sysUsuSessionId, Guid requestId, Guid grupoId, string nomeDoGrupo)
         {
-            Nome = nome;
-            GetGrupoRequest = getGrupoRequest;
+            SysUsuSessionId = sysUsuSessionId;
+            RequestId = requestId;
+            GrupoId = grupoId;
 
+            NomeDoGrupo = nomeDoGrupo;
+         
             Validate();
-            
         }
     }
 }

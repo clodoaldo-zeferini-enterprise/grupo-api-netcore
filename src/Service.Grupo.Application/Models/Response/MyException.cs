@@ -4,8 +4,8 @@ namespace Service.Grupo.Application.Models.Response
 {
     public class MyException
     {
-        public DateTime DataHora { get; set; }
-        public Exception Exception { get; set; }
+        public DateTime DataHora { get; private set; }
+        public Exception Exception { get; private set; }
 
         public MyException() { }
 

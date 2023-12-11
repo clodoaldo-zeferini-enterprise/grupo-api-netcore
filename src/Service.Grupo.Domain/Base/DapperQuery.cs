@@ -4,8 +4,8 @@ namespace Service.Grupo.Domain.Base
 {
     public class DapperQuery
     {
-        public Guid SysUsuSessionId { get; set; }
-        public string Query { get; set; }
+        public Guid SysUsuSessionId { get; private set; }
+        public string Query { get; private set; }
 
         public DapperQuery()
         {

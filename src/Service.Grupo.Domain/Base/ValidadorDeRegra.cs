@@ -6,7 +6,7 @@ namespace Service.Grupo.Domain.Base
 {
     public class ValidadorDeRegra
     {
-        private readonly List<string> _mensagensDeErros;
+        private List<string> _mensagensDeErros;
 
         private ValidadorDeRegra()
         {
@@ -35,7 +35,7 @@ namespace Service.Grupo.Domain.Base
 
     public class ExcecaoDeDominio : ArgumentException
     {
-        public List<string> MensagensDeErro { get; set; }
+        public List<string> MensagensDeErro { get; private set; }
 
         public ExcecaoDeDominio(List<string> mensagensDeErros)
         {

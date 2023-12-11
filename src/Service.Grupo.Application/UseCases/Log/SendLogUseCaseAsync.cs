@@ -24,7 +24,7 @@ namespace Service.Grupo.Application.UseCases.Log
         protected virtual void Dispose(bool disposing)
         {
             _configuration = null;
-            _output = null;
+            _logResponse = null;
 
         }
 
@@ -35,7 +35,7 @@ namespace Service.Grupo.Application.UseCases.Log
         #endregion
 
         private IConfiguration _configuration;
-        private LogOutResponse _output;
+        private LogOutResponse output;
         private LogResponse _logResponse;
 
         public SendLogUseCaseAsync(
@@ -43,11 +43,7 @@ namespace Service.Grupo.Application.UseCases.Log
         {
             _configuration = configuration;
 
-            _output = new()
-            {
-                Resultado = false,
-                Mensagem = "Dados Fornecidos são inválidos!"
-            };
+            output = new();
         }
 
         public async Task<LogOutResponse> ExecuteAsync(LogRequest request)
@@ -55,27 +51,27 @@ namespace Service.Grupo.Application.UseCases.Log
             try
             {
                 _logResponse = new LogResponse(true);
-                _output.Resultado = true;
-                _output.Mensagem = "Dado recuperado com Sucesso!";
-                _output.Data = _logResponse;
+                output.SetResultado(true);
+                output.AddMensagem("Dado recuperado com Sucesso!");
+                output.SetData(_logResponse);
 
-                return _output;
+                return output;
             }
             catch (Exception ex)
             {
-                _output.Mensagem = "Ocorreram Exceções durante a execução";
-                _output.AddExceptions(ex);
+                output.AddMensagem("Ocorreram Exceções durante a execução");
+                output.AddExceptions(ex);
                 Service.Grupo.Application.Models.Response.Errors.ErrorResponse errorResponse = new Service.Grupo.Application.Models.Response.Errors.ErrorResponse("id", "parameter", JsonConvert.SerializeObject(ex, Formatting.Indented));
                 List<Service.Grupo.Application.Models.Response.Errors.ErrorResponse> errorResponses = new List<Service.Grupo.Application.Models.Response.Errors.ErrorResponse>();
                 errorResponses.Add(errorResponse);
-                _output.ErrorsResponse = new Service.Grupo.Application.Models.Response.Errors.ErrorsResponse(errorResponses);
+                output.SetErrorsResponse(new Service.Grupo.Application.Models.Response.Errors.ErrorsResponse(errorResponses));
             }
             finally
             {
-                _output.Request = JsonConvert.SerializeObject(request, Formatting.Indented);
+                output.SetRequest(JsonConvert.SerializeObject(request, Formatting.Indented));
             }
 
-            return _output;
+            return output;
         }
     }
 }

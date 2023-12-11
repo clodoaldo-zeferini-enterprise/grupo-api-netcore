@@ -29,13 +29,19 @@ namespace Service.Grupo.Application.Base
         public void DispararExcecaoSeExistir()
         {
             if (_mensagensDeErros.Any())
+            {
                 throw new ExcecaoDeModelo(_mensagensDeErros);
+            }
+            else
+            {
+                int i = 0;
+            }
         }
     }
 
     public class ExcecaoDeModelo : ArgumentException
     {
-        public List<string> MensagensDeErro { get; set; }
+        public List<string> MensagensDeErro { get; private set; }
 
         public ExcecaoDeModelo(List<string> mensagensDeErros)
         {
